@@ -1,0 +1,60 @@
+<div class="iu-popup iu-popup--login">
+    <div class="iu-btn--close">&times;</div>
+    <form action="/login" method="POST" class="iu-form iu-form--login">
+        <h3>Log in</h3>
+        <div class="iu-form-element">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter username" required>
+        </div>
+        <div class="iu-form-element">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter password" required>
+        </div>
+        <div class="iu-form-element">
+            <input type="checkbox" id="remember-me">
+            <label for="remember-me">Remember me</label>
+        </div>
+        <div class="iu-form-element iu-form-element--submit">
+            <button type="submit" class="iu-btn--colored">Sign in</button>
+        </div>
+        <div class="iu-form-element">
+            <a href="#">Forgot password?</a>
+        </div>
+        <div class="iu-form-element">
+            <!-- Display error messages if they exist 
+            <% if (messages.error) { %>
+                <ul>
+                    <% messages.error.forEach(message => { %>
+                        <li><%= message %></li>
+                    <% }); %>
+                </ul>
+            <% } %> -->
+        </div>
+    </form>
+
+    <form action="/register" method="POST" class="iu-form iu-form--register">
+        <h3>Register</h3>
+        <div class="iu-form-element">
+            <label for="registerusername">Username</label>
+            <input type="text" id="registerusername" name="registerusername" placeholder="Enter username" required>
+        </div>
+        <div class="iu-form-element">
+            <label for="registerpassword">Password</label>
+            <input type="password" id="registerpassword" name="registerpassword" placeholder="Enter password" required>
+        </div>
+        <div class="iu-form-element">
+            <label for="registerpassword-confirm">Confirm password</label>
+            <input type="password" id="registerpassword-confirm" name="registerpasswordconfirm" placeholder="Enter password" required>
+        </div>
+        <div class="iu-form-element iu-form-element--submit">
+            <button type="submit" class="iu-btn--colored">Register</button>
+        </div>
+        <div class="iu-form-element">
+            <!-- !TODO error message -->
+        </div>
+    </form>
+    <div class="iu-popup__page-selection-wrapper flex">
+        <button class="iu-btn--colored iu-page-selection-btn iu-page-selection-btn--prev"><i class="fa-solid fa-chevron-left" style="color: #ffffff;"></i><span>Login</span></button>
+        <button class="iu-btn--colored iu-page-selection-btn iu-page-selection-btn--next"><span>Register</span><i class="fa-solid fa-chevron-right" style="color: #ffffff;"></i></button>
+    </div>
+</div>
