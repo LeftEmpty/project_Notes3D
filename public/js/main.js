@@ -30,3 +30,13 @@ document.querySelector(".iu-popup .iu-page-selection-btn--next").addEventListene
     document.querySelector(".iu-popup").classList.add("iu-popup--register");
     document.querySelector(".iu-popup").classList.remove("iu-popup--login");
 });
+
+document.querySelector('#iu-popup--logout-btn').addEventListener("click", function() {
+    console.log('clicked it');
+    fetch('/logout', {
+        method: "POST"
+    })
+})
+
+//<li class="iu-btn iu-btn--colored" id="iu-show-login"><a><%= bLoggedIn %></a></li>
+

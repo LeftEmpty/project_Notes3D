@@ -5,6 +5,27 @@
 #F8F1F1
 */
 
+/* temp ?? */
+
+#iu-popup--logout-btn > a {
+    position: relative;
+}
+
+header form {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+}
+
+header button {
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
 /* colors */
 :root{
     --main-color:#1e1e1e;

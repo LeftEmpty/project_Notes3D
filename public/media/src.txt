@@ -1,0 +1,8 @@
+banner-mannequin:
+self-made
+
+banner-wallpaper:
+https://wallpaperaccess.com/full/1259258.jpg
+
+placeholder-img:
+https://de.m.wikipedia.org/wiki/Datei:Placeholder_view_vector.svg
