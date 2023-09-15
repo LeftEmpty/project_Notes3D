@@ -55,14 +55,7 @@ async function fetchUserByUsername(username) {
         console.log(e);
         console.log('ERROR: fetchUserByUsername: username most likely invalid');
     }
-  }
-  
-  // Function to fetch a user by ID
-  async function fetchUser(userId) {
-    // Implement this function in database.js
-    // Example: const user = await db.query('SELECT * FROM users WHERE id = ?', [userId]);
-    // Make sure to handle errors and return the user object
-  }
+}
 
 async function createUser(username, password) {
     try {

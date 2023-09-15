@@ -5,26 +5,9 @@
 #F8F1F1
 */
 
-/* temp ?? */
 
-#iu-popup--logout-btn > a {
-    position: relative;
-}
 
-header form {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0px;
-    left: 0px;
-}
 
-header button {
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-    cursor: pointer;
-}
 
 /* colors */
 :root{
@@ -36,6 +19,7 @@ header button {
     --default--um-color:#46c146;
     --link-color:#1a79ca;
 }
+/** palette inspiration source: https://colorhunt.co/palette/025464e57c23e8aa42f8f1f1 */
 
 html, body{
     background-color:var(--main-color);
@@ -73,7 +57,71 @@ img{
     max-width:480px;
 }
 
-/** palette inspiration source: https://colorhunt.co/palette/025464e57c23e8aa42f8f1f1 */
+/* temp ?? */
+
+#iu-popup--logout-btn > a{
+    position: relative;
+}
+
+header form{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+}
+
+header button{
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+#upload-note{
+    width: 100%;
+    min-height: 180px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    outline: none;
+    border-radius: 6px;
+}
+
+#upload-files {
+    display:none;
+    /* this is accessed through the label (see below) */
+}
+
+.file-upload-custom-styling,
+#upload-submit{
+    border: none;
+    border-radius: 12px;
+    height: 82px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 26px;
+    padding:0 20px;
+    font-weight: 100;
+    font-family: 'Roboto', sans-serif;
+    background: var(--accent-color-dark);
+    text-transform: uppercase;
+    color: var(--off-white-color);
+    cursor: pointer;
+}
+.file-upload-custom-styling:hover,
+#upload-submit:hover{
+    background: var(--accent-color-bright);
+}
+
+.file-upload-custom-styling{
+    width: 180px;
+}
+
+#upload-submit{
+    width: 90px;
+    font-size: 42px;
+}
 
 /* layout framework */
 iu-body {
@@ -540,7 +588,6 @@ button.iu-page-selection-btn {
     font-weight: 300;
     text-transform: uppercase;
 }
-
 
 /* Utility */
 .white {

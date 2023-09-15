@@ -16,7 +16,9 @@ async function initialize(passport) {
             // Compare the provided password with the hashed password stored in the user object
             const passwordMatch = await bcrypt.compare(password, user.password);
             if (passwordMatch) {
-                console.log('successfully logged in as: ' + user.username);
+                console.log('USER - successfully logged in as: ' + user.username);
+                console.log('USER - User data:');
+                console.log(user);
                 return done(null, user);
             } else {
                 console.log('password incorrect');
@@ -44,7 +46,7 @@ async function initialize(passport) {
             return done(null, user);
         });
     });
-    
+
     /*
     await passport.serializeUser((user, done) => { return done(null, user.id); });
     await passport.deserializeUser(async (id, done) => {

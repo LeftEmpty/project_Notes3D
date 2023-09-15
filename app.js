@@ -11,9 +11,30 @@ const passport = require('passport');
 const flash = require('express-flash');
 const session = require('express-session');
 const expressLayouts = require('express-ejs-layouts');
+const multer = require('multer');
+// const cors = require('cors'); // dont need this if nothing is wrong
 
-const db = require('./database')
+// const db = require('./database') // dont think i need this actually
 const { fetchUser, fetchUserByUsername, createUser, createUserUploadTable } = require('./database.js');
+
+// root for static files
+app.use(express.static('public')); 
+
+// filesystem storage setup multer setup
+// set the storage options
+const upload = multer({
+    storage: multer.diskStorage({
+        // set file destination (folder)
+        destination: (req, file, callback) => {
+            callback(null, __dirname + '/public/uploads');
+        },
+        // set filename to be the original name of the file
+        filename: (req, file, callback) => {
+            callback(null, file.originalname);
+        }
+    })
+});
+
 
 // settings
 app.set('view engine', 'ejs');
@@ -32,13 +53,11 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+// app.use(cors());
 
 // init passport - this enables authentication
 const initializePassport = require('./passport-config');
 initializePassport(passport);
-
-// root for static files
-app.use(express.static('public')); 
 
 // routes
 app.get('/', (req, res) => {
@@ -56,10 +75,8 @@ app.get('/', (req, res) => {
 
 app.get('/profile', ensureAuthenticated, async (req, res) => {
     const messages = req.flash();
+    console.log('USER - Messages:');
     console.log(messages);
-    console.log('User data:' );
-    console.log(req.user);
-    console.log(req.session.passport.user);
     res.render('profile.ejs', {
         bLoggedIn: req.user == null ? false :true,
         username: req.user == null ? 'no username' : req.user.username,
@@ -72,33 +89,22 @@ app.get('/profile', ensureAuthenticated, async (req, res) => {
     });
 });
 
-function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect('/');
-}
 
+// login
 app.get('/login', (req, res) => {
     res.redirect('back');
-}); 
-
-app.get('/register', (req, res) => {
-    res.redirect('back');
 });
-
 app.post('/login', passport.authenticate('local', {
     successRedirect: '/profile',
     failureRedirect: 'back',
     failureFlash: true
 }), (req, res) => {
     const messages = req.flash();
-    // At this point, authentication is successful.
-    console.log('failed to login?'); 
-    console.log('Authenticated user:', req.user); 
+    // at this point, authentication is successful
     res.redirect('/', { messages: messages, temploginusername: username, temploginpassword: password });
 });
 
+// logout
 app.post('/logout', (req, res, next) => {
     req.logout((error) => {
     if (error) {
@@ -108,6 +114,10 @@ app.post('/logout', (req, res, next) => {
     });
 });
 
+// register
+app.get('/register', (req, res) => {
+    res.redirect('back');
+});
 app.post('/register', async (req, res) => {
     // !TODO set default values in form if registering failed (UX improvement)
 
@@ -140,7 +150,24 @@ app.post('/register', async (req, res) => {
     res.status(201).redirect('back'); 
 });
 
+// uplaods
+app.post('/uploads', upload.array('files'), (req, res) => {
+    // intercept files by using the ref name "files" from the formdata passed
+    console.log('UPLOAD - body'); console.log(req.body);
+    console.log('UPLOAD - files'); console.log(req.files);
+    res.json({
+        message: 'File/s successfully uploaded'
+    })
+})
+
 // temp
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/');
+}
+
 function checkAuthnticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
@@ -154,6 +181,7 @@ function checkNotAuthenticated(req, res, next) {
     }
     next();
 }
+
 
 
 app.listen(process.env.PORT || port, () => {

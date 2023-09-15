@@ -16,3 +16,9 @@ VALUES
 ("Donald", "123qweasdzxc"),
 ("Ebert", "passwort123"),
 ("Frida", "123qweasdzxc");
+
+CREATE TABLE uploads (
+    userKey VARCHAR(255) PRIMARY KEY NOT NULL,
+    filePath VARCHAR(255) NOT NULL,
+    created TIMESTAMP NOT NULL DEFAULT NOW()
+)

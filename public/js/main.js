@@ -1,17 +1,3 @@
-
-// Dynamic Popup for every page
-/*
-class IUPopup extends HTMLElement {
-    connectedCallback() {
-        this.innerHTML =
-        `
-        
-        `
-    }
-}
-customElements.define('iu-popup', IUPopup);
-*/
-
 // Handle popup open/close
 document.querySelector("#iu-show-login").addEventListener("click", function() {
     document.querySelector(".iu-popup").classList.add("iu-popup--active");
@@ -37,6 +23,3 @@ document.querySelector('#iu-popup--logout-btn').addEventListener("click", functi
         method: "POST"
     })
 })
-
-//<li class="iu-btn iu-btn--colored" id="iu-show-login"><a><%= bLoggedIn %></a></li>
-
