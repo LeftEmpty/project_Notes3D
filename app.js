@@ -33,6 +33,9 @@ const upload = multer({
         },
         // generate unique file name (ensure no files are overwritten)
         filename: async (req, file, callback) => {
+            /*  incrementing file amount which is part of the file name
+            /   should ensure unique filenames (in combination with Date.now()) */
+            await incrementModelAmountCounter();
             const filenr = await fetchModelAmountCounter();
             callback(null, req.body.userkey + '-' + filenr + '-' + Date.now() + '-' + file.originalname);
         }
@@ -164,7 +167,6 @@ app.post('/uploads', upload.array('files'), async (req, res) => {
     console.log('files:');
     console.log(req.files);
     for (const file of req.files) {
-        await incrementModelAmountCounter();
         await storeUpload(req.body.userkey, req.body.note, file.filename,
             file.originalname, file.path, file.size);
     }
