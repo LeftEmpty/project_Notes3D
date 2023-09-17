@@ -87,9 +87,14 @@ header button{
     border-radius: 6px;
 }
 
-#upload-files {
+#upload-files{
     display:none;
     /* this is accessed through the label (see below) */
+}
+
+#upload-user{
+    display:none;
+    visibility:hidden;
 }
 
 .file-upload-custom-styling,

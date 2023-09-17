@@ -40,7 +40,7 @@ async function fetchUser(id = null) {
     }
 }
 
-// Function to fetch a user by username
+// function to fetch a user by username
 async function fetchUserByUsername(username) {
     try {
         if (username != null) {
@@ -66,6 +66,77 @@ async function createUser(username, password) {
         return result.insertId;
     } catch (e) {
         console.log(e);
+    }
+}
+
+// UPLOADS
+async function fetchUpload(key) {
+    try {
+        if (username != null) {
+            const [rows] = await pool.query(`
+            SELECT *
+            FROM uploads
+            WHERE key = ?
+            `, [key]); // prepared statement
+            return rows[0];
+        }
+    } catch (e) {
+        console.log(e);
+        console.log('ERROR: fetchUserByUsername: username most likely invalid');
+    }
+}
+
+async function storeUpload(userKey, note, fileName, originalFileName, filePath, fileSize) {
+    try {
+        const result = await pool.query(`
+        INSERT INTO uploads (userKey, note, fileName, originalFileName, filePath, fileSize)
+        VALUES (?, ?, ?, ?, ?, ?)
+        `, [userKey, note, fileName, originalFileName, filePath, fileSize]);
+        return result.insertId;
+    } catch (e) {
+        if (error.code === 'ER_DUP_ENTRY') {
+            console.log('ERROR: duplicate entry - file name');
+        }
+        console.log(e)
+    }
+}
+
+function getCurDate() {
+    const curDate = new Date();
+    const options = {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    };
+    return(curDate.toLocaleDateString('en-US', options).replace(/\//g, '.'));
+}
+
+// COUNTER
+async function incrementModelAmountCounter() {
+    try {
+        await pool.query(`
+        UPDATE counter SET count = count + 1;
+        `);
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+async function fetchModelAmountCounter() {
+    console.log('fetching amount counter');
+    try {
+        const result = await pool.query(`
+        SELECT count FROM counter;
+        `);
+        // there shouldnt be any other rows in counter table
+        if (result.length !== 2) {
+            throw new Error('Wrong number of rows in counter table');
+        }
+        console.log('model counter value: ' + result[0][0].count);
+        return result[0][0].count;
+    } catch (e) {
+        console.log(e);
+        return null;
     }
 }
 
@@ -103,6 +174,7 @@ async function recreateTable() {
 }
 async function repopulateTable() {
     try {
+        // example users
         const names = ["Anna", "Berta", "Charlie", "Donald"];
         const passwords = ["pw1", "pw2", "pw3", "pw4"];
 
@@ -133,10 +205,14 @@ async function logUser(id = null) {
 }
 // templog('another one', 'haha lmao');
 
-// resetDb();
-
 // logUser();
 
+// resetDb();
+
+// incrementModelAmountCounter();
+
 module.exports = {
-    fetchUser, fetchUserByUsername, createUser
+    fetchUser, fetchUserByUsername, createUser,
+    fetchUpload, storeUpload,
+    fetchModelAmountCounter, incrementModelAmountCounter
 }

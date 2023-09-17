@@ -37,8 +37,8 @@
                         <div class="iu-um__desc">
                             <h4 class="iu-um__title">Your Mesh</h4>
                             <div class="flex">
-                                <p><b>Date: </b></p><p class="iu-um__date">01.01.23</p>
                                 <p><b>File: </b></p><p class="iu-um__filename">filename.glb</p>
+                                <p><b>Date: </b></p><p class="iu-um__date">01.01.23</p>
                             </div>
                         </div>
                         <div class="iu-um__del"><i class="fa-solid fa-trash"></i></div>
@@ -51,8 +51,8 @@
                         <div class="iu-um__desc">
                             <h4 class="iu-um__title">Your Mesh</h4>
                             <div class="flex">
-                                <p><b>Date: </b></p><p class="iu-um__date">01.01.23</p>
                                 <p><b>File: </b></p><p class="iu-um__filename">filename.glb</p>
+                                <p><b>Date: </b></p><p class="iu-um__date">01.01.23</p>
                             </div>
                         </div>
                         <div class="iu-um__del"><i class="fa-solid fa-trash"></i></div>
@@ -70,6 +70,7 @@
             <div class="iu-box">
                 <div class="button">
                     <form id="file-upload-form">
+                        <input type="text" name="upload-user" value="<%= locals.username + "_" + locals.id %>" id="upload-user" readonly>
                         <label for="upload-note" class="">Note</label>
                         <textarea resize="none" name="upload-note" id="upload-note"></textarea>
                         <label for="upload-files" class="file-upload-custom-styling">Select Files</label>

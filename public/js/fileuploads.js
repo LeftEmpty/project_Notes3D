@@ -12,7 +12,9 @@ uploadForm.addEventListener("submit", (event) => {
     const formData = new FormData();
     const noteField = document.querySelector('#upload-note');
     const filesField = document.querySelector('#upload-files');
-    
+    const filesUserkey = document.querySelector('#upload-user');
+
+    formData.append('userkey', filesUserkey.value);
     formData.append('note', noteField.value);
     for (let i = 0; i < filesField.files.length; i++) {
         formData.append('files', filesField.files[i]);

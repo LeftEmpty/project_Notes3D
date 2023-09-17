@@ -8,17 +8,18 @@ CREATE TABLE users (
     created TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-INSERT INTO users (username, password)
-VALUES
-("Anna", "passwort123"),
-("Berta", "123qweasdzxc"),
-("Charlie", "passwort123"),
-("Donald", "123qweasdzxc"),
-("Ebert", "passwort123"),
-("Frida", "123qweasdzxc");
-
 CREATE TABLE uploads (
-    userKey VARCHAR(255) PRIMARY KEY NOT NULL,
+    userKey VARCHAR(255) NOT NULL,
+    note TEXT,
+    fileName VARCHAR(255) PRIMARY KEY NOT NULL,
+    originalFileName VARCHAR(255) NOT NULL,
     filePath VARCHAR(255) NOT NULL,
+    fileSize VARCHAR(255) NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT NOW()
-)
+);
+
+CREATE TABLE counter (
+    count integer NOT NULL
+);
+
+INSERT INTO counter (count) VALUES (0);

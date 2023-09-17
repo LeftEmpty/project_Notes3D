@@ -15,26 +15,29 @@ const multer = require('multer');
 // const cors = require('cors'); // dont need this if nothing is wrong
 
 // const db = require('./database') // dont think i need this actually
-const { fetchUser, fetchUserByUsername, createUser, createUserUploadTable } = require('./database.js');
+const {
+    fetchUser, fetchUserByUsername, createUser,
+    fetchUpload, storeUpload,
+    fetchModelAmountCounter, incrementModelAmountCounter
+} = require('./database.js');
 
 // root for static files
 app.use(express.static('public')); 
 
-// filesystem storage setup multer setup
-// set the storage options
+// set the storage options - multer setup
 const upload = multer({
     storage: multer.diskStorage({
-        // set file destination (folder)
+        // set file destination (folder, should be cloud storage in actual production environment)
         destination: (req, file, callback) => {
             callback(null, __dirname + '/public/uploads');
         },
-        // set filename to be the original name of the file
-        filename: (req, file, callback) => {
-            callback(null, file.originalname);
+        // generate unique file name (ensure no files are overwritten)
+        filename: async (req, file, callback) => {
+            const filenr = await fetchModelAmountCounter();
+            callback(null, req.body.userkey + '-' + filenr + '-' + Date.now() + '-' + file.originalname);
         }
     })
 });
-
 
 // settings
 app.set('view engine', 'ejs');
@@ -80,6 +83,7 @@ app.get('/profile', ensureAuthenticated, async (req, res) => {
     res.render('profile.ejs', {
         bLoggedIn: req.user == null ? false :true,
         username: req.user == null ? 'no username' : req.user.username,
+        id: req.user == null ? 'noid' : req.user.id,
         messages: messages,
         temploginusername: "",
         temploginpassword: "",
@@ -151,10 +155,21 @@ app.post('/register', async (req, res) => {
 });
 
 // uplaods
-app.post('/uploads', upload.array('files'), (req, res) => {
+app.post('/uploads', upload.array('files'), async (req, res) => {
     // intercept files by using the ref name "files" from the formdata passed
     console.log('UPLOAD - body'); console.log(req.body);
     console.log('UPLOAD - files'); console.log(req.files);
+    
+    // save uploads to db
+    console.log('files:');
+    console.log(req.files);
+    for (const file of req.files) {
+        await incrementModelAmountCounter();
+        await storeUpload(req.body.userkey, req.body.note, file.filename,
+            file.originalname, file.path, file.size);
+    }
+
+    // success json !TODO implement user feedback
     res.json({
         message: 'File/s successfully uploaded'
     })
