@@ -12,7 +12,6 @@ const flash = require('express-flash');
 const session = require('express-session');
 const expressLayouts = require('express-ejs-layouts');
 const multer = require('multer');
-// const cors = require('cors'); // dont need this if nothing is wrong
 
 // const db = require('./database') // dont think i need this actually
 const {
@@ -59,7 +58,7 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-// app.use(cors());
+
 
 // init passport - this enables authentication
 const initializePassport = require('./passport-config');
@@ -81,18 +80,20 @@ app.get('/', (req, res) => {
 
 app.get('/profile', ensureAuthenticated, async (req, res) => {
     const messages = req.flash();
-    console.log('USER - Messages:');
-    console.log(messages);
+    const userKey = req.user.username + "_" + req.user.id;
     res.render('profile.ejs', {
         bLoggedIn: req.user == null ? false :true,
         username: req.user == null ? 'no username' : req.user.username,
         id: req.user == null ? 'noid' : req.user.id,
+        // login / register popup forms
         messages: messages,
         temploginusername: "",
         temploginpassword: "",
         tempregisterusername: "",
         tempregisterpassword1: "",
-        tempregisterpassword2: ""
+        tempregisterpassword2: "",
+        // uploads
+        uploadlist: await fetchUpload(false, userKey)
     });
 });
 
@@ -154,14 +155,12 @@ app.post('/register', async (req, res) => {
         res.status(500);
         console.log('couldnt register user');
     }
-    res.status(201).redirect('back'); 
+    res.statsu(201).json({ message: 'Data fetched successfully!' });
 });
 
 // uplaods
 app.post('/uploads', upload.array('files'), async (req, res) => {
     // intercept files by using the ref name "files" from the formdata passed
-    console.log('UPLOAD - body'); console.log(req.body);
-    console.log('UPLOAD - files'); console.log(req.files);
     
     // save uploads to db
     console.log('files:');
@@ -171,10 +170,8 @@ app.post('/uploads', upload.array('files'), async (req, res) => {
             file.originalname, file.path, file.size);
     }
 
-    // success json !TODO implement user feedback
-    res.json({
-        message: 'File/s successfully uploaded'
-    })
+    // success !TODO implement user feedback
+    res.json({ message: 'Data fetched successfully!' });
 })
 
 // temp

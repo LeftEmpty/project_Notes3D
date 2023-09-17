@@ -20,15 +20,20 @@ uploadForm.addEventListener("submit", (event) => {
         formData.append('files', filesField.files[i]);
     }
 
-    console.log('formdata:');
-    console.log(...formData);
+    // console.log('formdata:');
+    // console.log(...formData);
 
     // !TODO temp - should be the environment variable.. somehow
     fetch('http://localhost:3333/uploads', {
         method: 'POST',
         body: formData,
     })
-    // !TODO reaction or feedback to the user
-    .then(res => res.json())
-    .then(data => console.log(data));
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        location.reload();
+    })
+    .catch(error => {
+        console.error('ERROR:', error);
+    });
 })

@@ -29,35 +29,25 @@
         <div class="iu-content">
             <div class="iu-box">
                 <ul class="iu-um-list">
-
-                    <div class="iu-um iu-um--active">
-                        <div class="iu-um__color">
-                            <!-- color indicator for user -->
-                        </div>
-                        <div class="iu-um__desc">
-                            <h4 class="iu-um__title">Your Mesh</h4>
-                            <div class="flex">
-                                <p><b>File: </b></p><p class="iu-um__filename">filename.glb</p>
-                                <p><b>Date: </b></p><p class="iu-um__date">01.01.23</p>
+                    <% for(const upload of locals.uploadlist) { %>
+                        <div class="iu-um">
+                            <div class="iu-um__color">
+                                <!-- color indicator for user -->
                             </div>
-                        </div>
-                        <div class="iu-um__del"><i class="fa-solid fa-trash"></i></div>
-                    </div>
-
-                    <div class="iu-um">
-                        <div class="iu-um__color">
-                            <!-- color indicator for user -->
-                        </div>
-                        <div class="iu-um__desc">
-                            <h4 class="iu-um__title">Your Mesh</h4>
-                            <div class="flex">
-                                <p><b>File: </b></p><p class="iu-um__filename">filename.glb</p>
-                                <p><b>Date: </b></p><p class="iu-um__date">01.01.23</p>
+                            <div class="iu-um__desc">
+                                <h4 class="iu-um__title"><%= upload.originalFileName %></h4>
+                                <div class="flex">
+                                    <p><b>Note: </b></p><p class="iu-um__filename"><%= upload.note %></p>
+                                    <p><b>Upload date: </b></p><p class="iu-um__date"><%= upload.created %></p>
+                                    <p><b>Filesize: </b></p><p class="iu-um__filename"><%= upload.fileSize / 1000 + ' KB'  %></p>
+                                </div>
                             </div>
+                            <div class="iu-um__del"><i class="fa-solid fa-trash"></i></div>
                         </div>
-                        <div class="iu-um__del"><i class="fa-solid fa-trash"></i></div>
-                    </div>
-
+                    <% } %>
+                    <% if(locals.uploadlist.length == 0) { %>
+                        <h4>you have not uploaded anything yet.</h4>
+                    <% } %>
                 </ul>
             </div>
         </div>
