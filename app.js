@@ -155,7 +155,7 @@ app.post('/register', async (req, res) => {
         res.status(500);
         console.log('couldnt register user');
     }
-    res.statsu(201).json({ message: 'Data fetched successfully!' });
+    res.status(201).json({ message: 'Data fetched successfully!' });
 });
 
 // uplaods
