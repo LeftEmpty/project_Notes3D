@@ -71,8 +71,6 @@ async function createUser(username, password) {
 
 // UPLOADS
 async function fetchUpload(user, id = null) {
-    console.log(user);
-    console.log(id);
     try {
         // get single upload
         if (id != null) {
@@ -81,7 +79,6 @@ async function fetchUpload(user, id = null) {
             WHERE user = ? AND id = ?
             `, [user, id]); // prepared statemen
             rows[0].created = formatDate(rows[0].created);
-            console.log(rows[0]);
             return rows[0];
         }
         // get all uploads from user
@@ -93,7 +90,6 @@ async function fetchUpload(user, id = null) {
             for (let i = 0; i < rows.length; i++) {
                 rows[i].created = formatDate(rows[i].created);
             }
-            console.log(rows);
             return rows;
         }
     } catch (e) {
@@ -127,16 +123,17 @@ async function storeUpload(username, note, fileName, originalFileName, filePath,
 }
 
 async function deleteUpload(user, id) {
-    /* !TODO
-    console.log('deleting upload: ' + id + ' [id]');
-    try {
-        const result = await pool.query(`
+    try { 
+        // console.log('deleting upload: ' + user + ' [user]');
+        // console.log('deleting upload: ' + id + ' [id]');
+        // console.log('DELETING:');
+        // console.log(await fetchUpload(user, id));
+        await pool.query(`
         DELETE FROM uploads WHERE user = ? AND id = ?
-        `[user, id]);
-        return result;
+        `, [user, id]);
     } catch (e) {
         console.log(e);
-    } */
+    }
 }
 
 // COUNTER

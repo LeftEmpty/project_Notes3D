@@ -12,6 +12,7 @@ const flash = require('express-flash');
 const session = require('express-session');
 const expressLayouts = require('express-ejs-layouts');
 const multer = require('multer');
+const fs = require('fs');
 
 // const db = require('./database') // dont think i need this actually
 const {
@@ -93,7 +94,8 @@ app.get('/profile', ensureAuthenticated, async (req, res) => {
         tempregisterpassword1: "",
         tempregisterpassword2: "",
         // uploads
-        uploadlist: await fetchUpload(req.user.username)
+        uploadlist: await fetchUpload(req.user.username),
+        selectedUpload: ""
     });
 });
 
@@ -196,8 +198,6 @@ app.post('/uploads', upload.array('files'), async (req, res) => {
     // intercept files by using the ref name "files" from the formdata passed
     
     // save uploads to db
-    console.log('files:');
-    console.log(req.files);
     try {
         for (const file of req.files) {
             // store file in db
@@ -215,12 +215,25 @@ app.post('/uploads', upload.array('files'), async (req, res) => {
         console.log('ERROR: coulndt upload file in post method');
         console.log(e);
     }
-    
+
 })
 
-app.delete('/uploads', async (req, res) => {
+app.delete('/uploads/:id', ensureAuthenticated, async (req, res) => {
     try {
-        deleteUpload(req.body.user, req.body.filename);
+        // delete file from server (or folder)
+        const tmp = await fetchUpload(req.user.username, req.params.id);
+        fs.unlink(tmp.filePath, (error) => {
+            if (error) {
+                console.error('ERROR: couldnt delete file:', error);
+            } else {
+                console.log('file was successfully deleted');
+                return;
+            }
+        });
+
+        // remove upload from database
+        await deleteUpload(req.user.username, req.params.id);
+        res.json({ message: 'Deleting upload successfull!' });
     } catch (e) {
         console.log('ERROR: couldnt delete upload');
         console.log(e);
@@ -228,7 +241,7 @@ app.delete('/uploads', async (req, res) => {
 })
 
 
-// temp
+// Authentication helper functions
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
@@ -253,5 +266,10 @@ function checkNotAuthenticated(req, res, next) {
 
 
 app.listen(process.env.PORT || port, () => {
-    console.log('server is running on port ' + port);
+    if (process.env.PORT) {
+        console.log('server is running on port ' + process.env.PORT);
+    }
+    else {
+        console.log('server is running on port ' + port);
+    }
 });

@@ -1,9 +1,7 @@
-console.log('uploads script');
-
+// console.log('uploads script');
+const uploadsURL = 'http://localhost:3333/uploads/';
 
 const uploadForm = document.querySelector('#file-upload-form');
-
-console.log(uploadForm);
 
 uploadForm.addEventListener("submit", (event) => {
     // prevent default form submit
@@ -27,7 +25,7 @@ uploadForm.addEventListener("submit", (event) => {
     // console.log(...formData);
 
     // !TODO temp - should be the environment variable.. somehow
-    fetch('http://localhost:3333/uploads', {
+    fetch(uploadsURL, {
         method: 'POST',
         body: formData,
     })
@@ -41,17 +39,25 @@ uploadForm.addEventListener("submit", (event) => {
     });
 })
 
-function deleteThisUpload(filename) {
-    console.log('trying to delete upload')
-    const uploadData = [];
-    uploadData.append(filename);
 
+// add onclick events to upload list for deleting
+const uploadsList = document.querySelector('#iu-um-list');
 
-    fetch ('http://localhost:333/uploads', {
-        method: 'DELETE',
-        body: uploadData,
+uploadsList.addEventListener("click", (event) => {
+    if (event.target.classList.contains('iu_um_delanchor')) {
+        const id = event.target.getAttribute('data-id');
+        delUpload(id);
+    }
+});
+
+function delUpload(id) {
+    // !TODO temp - should be the environment variable.. somehow
+    const url = uploadsURL + id;
+
+    fetch (url, {
+        method: 'DELETE'
     })
-    .then (response => json())
+    .then (response => response.json())
     .then(data => {
         console.log(data);
         location.reload();

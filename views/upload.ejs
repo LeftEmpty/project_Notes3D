@@ -28,7 +28,7 @@
     <div class="iu-row">
         <div class="iu-content">
             <div class="iu-box">
-                <ul class="iu-um-list">
+                <ul id="iu-um-list" class="iu-um-list">
                     <% for(const upload of locals.uploadlist) { %>
                         <div class="iu-um">
                             <a href="/uploads/<%= upload.id %>">View Mesh</a>
@@ -38,12 +38,15 @@
                             <div class="iu-um__desc">
                                 <h4 class="iu-um__title"><%= upload.originalFileName %></h4>
                                 <div class="flex">
-                                    <p><b>Note: </b></p><p class="iu-um__filename"><%= upload.note.substring(0,10) %> <% if(upload.note.length > 10) { %> <span>...</span> <% } %></p>
+                                    <p><b>Note: </b></p><p class="iu-um__filename"><%= upload.note.substring(0,25) %> <% if(upload.note.length > 25) { %> <span>...</span> <% } %></p>
                                     <p><b>Upload date: </b></p><p class="iu-um__date"><%= upload.created %></p>
                                     <p><b>Filesize: </b></p><p class="iu-um__filename"><%= (upload.fileSize / 1000) - ((upload.fileSize / 1000) % 1) + ' KB'  %></p>
                                 </div>
                             </div>
-                            <div class="iu-um__del"><a onclick="test()"></a><i class="fa-solid fa-trash"></i></div>
+                            <div class="iu-um__del">
+                                <a class="iu_um_delanchor" data-id="<%= upload.id %>"></a>
+                                <i class="fa-solid fa-trash"></i>
+                            </div>
                         </div>
                     <% } %>
                     <% if(locals.uploadlist.length == 0) { %>
