@@ -12,7 +12,6 @@ async function initialize(passport) {
             return done(null, false, { message: 'ERROR: Username not found' });
         }
         try {
-            console.log('trying to log in as: ' + user.username);
             // Compare the provided password with the hashed password stored in the user object
             const passwordMatch = await bcrypt.compare(password, user.password);
             if (passwordMatch) {
@@ -21,7 +20,7 @@ async function initialize(passport) {
                 console.log(user);
                 return done(null, user);
             } else {
-                console.log('password incorrect');
+                console.log('WARNING: password incorrect');
                 return done(null, false, { message: 'WARNING: Password incorrect' });
             }
         } catch (e) {
@@ -45,18 +44,6 @@ async function initialize(passport) {
             return done(null, user);
         });
     });
-
-    /*
-    await passport.serializeUser((user, done) => { return done(null, user.id); });
-    await passport.deserializeUser(async (id, done) => {
-        try {
-            const user = await fetchUser(id);
-            return done(null, user); 
-        } catch (e) {
-            done (e, null);
-        }
-    });
-    */
 }
 
 

@@ -93,7 +93,8 @@ async function fetchUpload(user, id = null) {
             return rows;
         }
     } catch (e) {
-        console.log('ERROR: fetchUpload - couldnt upload file');
+        console.log('ERROR: fetchUpload - couldnt fetch file');
+        console.log('user: ' + user + " | id: " + id);
         console.log(e);
     }
 }
@@ -115,10 +116,28 @@ async function storeUpload(username, note, fileName, originalFileName, filePath,
         `, [username, note, fileName, originalFileName, filePath, fileSize]);
         return result.insertId;
     } catch (e) {
-        if (e.code === 'ER_DUP_ENTRY') {
+        if (e.code == 'ER_DUP_ENTRY') {
             console.log('ERROR: duplicate entry - file name');
         }
         console.log(e)
+    }
+}
+
+async function editUpload(user, id, newNote) {
+    try {
+        const tmp = await fetchUpload(user, id);
+        if (tmp == null) {
+            throw Error('ERROR: No file found, invalid input')
+        }
+        const result = await pool.query(`
+        UPDATE uploads
+        SET note = ?
+        WHERE user = ? AND id = ?;
+        `, [newNote, user, id]);
+        // console.log(result);
+        return result;
+    } catch (e) {
+        console.log(e);
     }
 }
 
@@ -153,7 +172,7 @@ async function fetchModelAmountCounter() {
         SELECT count FROM counter;
         `);
         // there shouldnt be any other rows in counter table
-        if (result.length !== 2) {
+        if (result.length != 2) {
             throw new Error('Wrong number of rows in counter table');
         }
         return result[0][0].count;
@@ -218,6 +237,6 @@ async function repopulateUserTable() {
 
 module.exports = {
     fetchUser, fetchUserByUsername, createUser,
-    fetchUpload, storeUpload, deleteUpload,
+    fetchUpload, storeUpload, deleteUpload, editUpload,
     fetchModelAmountCounter, incrementModelAmountCounter
 }

@@ -1,6 +1,8 @@
 // console.log('uploads script');
 const uploadsURL = 'http://localhost:3333/uploads/';
 
+// ADDING UPLOAD
+
 const uploadForm = document.querySelector('#file-upload-form');
 
 uploadForm.addEventListener("submit", (event) => {
@@ -39,6 +41,7 @@ uploadForm.addEventListener("submit", (event) => {
     });
 })
 
+// DELETING UPLOAD
 
 // add onclick events to upload list for deleting
 const uploadsList = document.querySelector('#iu-um-list');
@@ -63,3 +66,28 @@ function delUpload(id) {
         location.reload();
     })
 }
+
+// EDITING UPLOAD
+const editForm = document.querySelector('#edit-upload-form');
+console
+
+editForm.addEventListener("submit", (event) => {
+    // prevent default form submit
+    event.preventDefault();
+
+    const noteField = document.querySelector('#cur-upload-note');
+    const url = uploadsURL + editForm.querySelector('#btn--cur-note--submit').getAttribute('data-id');
+
+    fetch(url, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ note: noteField.value })
+    })
+    .then (response => response.json())
+    .then(data => {
+        console.log(data);
+        location.reload();
+    })
+})

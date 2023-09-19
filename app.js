@@ -17,7 +17,7 @@ const fs = require('fs');
 // const db = require('./database') // dont think i need this actually
 const {
     fetchUser, fetchUserByUsername, createUser,
-    fetchUpload, storeUpload, deleteUpload,
+    fetchUpload, storeUpload, deleteUpload, editUpload,
     fetchModelAmountCounter, incrementModelAmountCounter
 } = require('./database.js');
 
@@ -216,6 +216,19 @@ app.post('/uploads', upload.array('files'), async (req, res) => {
         console.log(e);
     }
 
+})
+
+app.put('/uploads/:id', ensureAuthenticated, async (req, res) => {
+    try {
+        console.log('EDIT: user: ' + req.user.username + 
+            ' | id: ' + req.params.id +
+            ' | new note: ' + req.body.note);
+        
+        await editUpload(req.user.username, req.params.id, req.body.note);
+
+    } catch (e) {
+        console.log(e);
+    }
 })
 
 app.delete('/uploads/:id', ensureAuthenticated, async (req, res) => {
