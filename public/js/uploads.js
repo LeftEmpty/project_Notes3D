@@ -1,6 +1,9 @@
-// console.log('fileuploads script');
+console.log('uploads script');
+
 
 const uploadForm = document.querySelector('#file-upload-form');
+
+console.log(uploadForm);
 
 uploadForm.addEventListener("submit", (event) => {
     // prevent default form submit
@@ -12,9 +15,9 @@ uploadForm.addEventListener("submit", (event) => {
     const formData = new FormData();
     const noteField = document.querySelector('#upload-note');
     const filesField = document.querySelector('#upload-files');
-    const filesUserkey = document.querySelector('#upload-user');
+    const filesUsername = document.querySelector('#upload-user');
 
-    formData.append('userkey', filesUserkey.value);
+    formData.append('fileUsername', filesUsername.value);
     formData.append('note', noteField.value);
     for (let i = 0; i < filesField.files.length; i++) {
         formData.append('files', filesField.files[i]);
@@ -37,3 +40,20 @@ uploadForm.addEventListener("submit", (event) => {
         console.error('ERROR:', error);
     });
 })
+
+function deleteThisUpload(filename) {
+    console.log('trying to delete upload')
+    const uploadData = [];
+    uploadData.append(filename);
+
+
+    fetch ('http://localhost:333/uploads', {
+        method: 'DELETE',
+        body: uploadData,
+    })
+    .then (response => json())
+    .then(data => {
+        console.log(data);
+        location.reload();
+    })
+}

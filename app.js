@@ -16,12 +16,12 @@ const multer = require('multer');
 // const db = require('./database') // dont think i need this actually
 const {
     fetchUser, fetchUserByUsername, createUser,
-    fetchUpload, storeUpload,
+    fetchUpload, storeUpload, deleteUpload,
     fetchModelAmountCounter, incrementModelAmountCounter
 } = require('./database.js');
 
 // root for static files
-app.use(express.static('public')); 
+app.use(express.static('public'));
 
 // set the storage options - multer setup
 const upload = multer({
@@ -36,7 +36,7 @@ const upload = multer({
             /   should ensure unique filenames (in combination with Date.now()) */
             await incrementModelAmountCounter();
             const filenr = await fetchModelAmountCounter();
-            callback(null, req.body.userkey + '-' + filenr + '-' + Date.now() + '-' + file.originalname);
+            callback(null, req.body.fileUsername + '-' + filenr + '-' + Date.now() + '-' + file.originalname);
         }
     })
 });
@@ -68,8 +68,8 @@ initializePassport(passport);
 app.get('/', (req, res) => {
     const messages = req.flash();
     res.render('index.ejs', {
-        bLoggedIn: req.user == null ? false :true,
         messages: messages,
+        bLoggedIn: req.user == null ? false :true,
         temploginusername: "",
         temploginpassword: "",
         tempregisterusername: "",
@@ -80,20 +80,20 @@ app.get('/', (req, res) => {
 
 app.get('/profile', ensureAuthenticated, async (req, res) => {
     const messages = req.flash();
-    const userKey = req.user.username + "_" + req.user.id;
     res.render('profile.ejs', {
-        bLoggedIn: req.user == null ? false :true,
+        // current user
         username: req.user == null ? 'no username' : req.user.username,
         id: req.user == null ? 'noid' : req.user.id,
         // login / register popup forms
         messages: messages,
+        bLoggedIn: req.user == null ? false :true,
         temploginusername: "",
         temploginpassword: "",
         tempregisterusername: "",
         tempregisterpassword1: "",
         tempregisterpassword2: "",
         // uploads
-        uploadlist: await fetchUpload(false, userKey)
+        uploadlist: await fetchUpload(req.user.username)
     });
 });
 
@@ -159,20 +159,74 @@ app.post('/register', async (req, res) => {
 });
 
 // uplaods
+app.get('/uploads/:id', ensureAuthenticated, async (req, res) => {
+    const messages = req.flash();
+    const id = req.params.id;
+    try {
+        // fetch upload via id
+        const selectedUpload = await fetchUpload(req.user.username, id);
+        if (selectedUpload) {
+            // page with current mesh
+            res.render('upload.ejs', {
+                // current user
+                username: req.user == null ? 'no username' : req.user.username,
+                id: req.user == null ? 'noid' : req.user.id,
+                // login / register popup forms
+                messages: messages,
+                bLoggedIn: req.user == null ? false :true,
+                temploginusername: "",
+                temploginpassword: "",
+                tempregisterusername: "",
+                tempregisterpassword1: "",
+                tempregisterpassword2: "",
+                // uploads
+                uploadlist: await fetchUpload(req.user.username),
+                selectedUpload: selectedUpload,
+            });
+        } else {
+            res.status(404).send('Mesh not found'); // !TODO should make an 404 page
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 app.post('/uploads', upload.array('files'), async (req, res) => {
     // intercept files by using the ref name "files" from the formdata passed
     
     // save uploads to db
     console.log('files:');
     console.log(req.files);
-    for (const file of req.files) {
-        await storeUpload(req.body.userkey, req.body.note, file.filename,
-            file.originalname, file.path, file.size);
+    try {
+        for (const file of req.files) {
+            // store file in db
+            await storeUpload(req.body.fileUsername, req.body.note, file.filename,
+                file.originalname, file.path, file.size);
+            // delete upload if input was invalid
+            if (req.body.fileUsername != req.user.username) {
+                // !TODO await deleteUpload();
+                throw new Error('ERROR: submitted invalid input in upload html form');
+            }
+        }
+        // success !TODO implement user feedback
+        res.json({ message: 'Data fetched successfully!' });
+    } catch (e) {
+        console.log('ERROR: coulndt upload file in post method');
+        console.log(e);
     }
-
-    // success !TODO implement user feedback
-    res.json({ message: 'Data fetched successfully!' });
+    
 })
+
+app.delete('/uploads', async (req, res) => {
+    try {
+        deleteUpload(req.body.user, req.body.filename);
+    } catch (e) {
+        console.log('ERROR: couldnt delete upload');
+        console.log(e);
+    }
+})
+
 
 // temp
 function ensureAuthenticated(req, res, next) {

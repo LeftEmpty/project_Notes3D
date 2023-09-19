@@ -70,31 +70,30 @@ async function createUser(username, password) {
 }
 
 // UPLOADS
-async function fetchUpload(bSingle = true, userKey, fileName = null) {
+async function fetchUpload(user, id = null) {
+    console.log(user);
+    console.log(id);
     try {
         // get single upload
-        if (bSingle) {
-            if (fileName == null) {
-                throw new Error('couldnt fetch upload - fileName invalid');
-            }
+        if (id != null) {
             const [rows] = await pool.query(`
-            SELECT *, DATE_FORMAT(created, '%d.%m.%Y') AS uploadDate
-            FROM uploads
-            WHERE userKey = ? AND fileName = ?
-            `, [userKey], [fileName]); // prepared statement
+            SELECT * FROM uploads
+            WHERE user = ? AND id = ?
+            `, [user, id]); // prepared statemen
+            rows[0].created = formatDate(rows[0].created);
             console.log(rows[0]);
             return rows[0];
         }
         // get all uploads from user
-        if (!bSingle) {
-            if (fileName != null) {
-                console.log('WARNING: fileName is ignored if all uploads are requested');
-            }
+        if (id == null) {
             const [rows] = await pool.query(`
-            SELECT *, DATE_FORMAT(created, '%d.%m.%Y') AS uploadDate
-            FROM uploads
-            WHERE userKey = ?
-            `, [userKey]); // prepared statement
+            SELECT * FROM uploads
+            WHERE user = ?
+            `, [user]); // prepared statement
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].created = formatDate(rows[i].created);
+            }
+            console.log(rows);
             return rows;
         }
     } catch (e) {
@@ -103,12 +102,21 @@ async function fetchUpload(bSingle = true, userKey, fileName = null) {
     }
 }
 
-async function storeUpload(userKey, note, fileName, originalFileName, filePath, fileSize) {
+function formatDate(date) {
+    const options = {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    };
+    return(date.toLocaleDateString('en-US', options).replace(/\//g, '.'));
+}
+
+async function storeUpload(username, note, fileName, originalFileName, filePath, fileSize) {
     try {
         const result = await pool.query(`
-        INSERT INTO uploads (userKey, note, fileName, originalFileName, filePath, fileSize)
+        INSERT INTO uploads (user, note, fileName, originalFileName, filePath, fileSize)
         VALUES (?, ?, ?, ?, ?, ?)
-        `, [userKey, note, fileName, originalFileName, filePath, fileSize]);
+        `, [username, note, fileName, originalFileName, filePath, fileSize]);
         return result.insertId;
     } catch (e) {
         if (e.code === 'ER_DUP_ENTRY') {
@@ -118,14 +126,17 @@ async function storeUpload(userKey, note, fileName, originalFileName, filePath, 
     }
 }
 
-function getCurDate() {
-    const curDate = new Date();
-    const options = {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-    };
-    return(curDate.toLocaleDateString('en-US', options).replace(/\//g, '.'));
+async function deleteUpload(user, id) {
+    /* !TODO
+    console.log('deleting upload: ' + id + ' [id]');
+    try {
+        const result = await pool.query(`
+        DELETE FROM uploads WHERE user = ? AND id = ?
+        `[user, id]);
+        return result;
+    } catch (e) {
+        console.log(e);
+    } */
 }
 
 // COUNTER
@@ -159,12 +170,21 @@ async function fetchModelAmountCounter() {
 // DEBUG
 async function resetTable(tablename) {
     try {
-        // await dropTable();
-        // await recreateTable();
-        // await repopulateTable();
-        await emptyTable(tablename);
-        if (tablename == 'users') {
-            await repopulateUserTable();
+        switch (tablename) {
+            case 'uploads':
+                await emptyTable(tablename);
+                break;
+            case 'users':
+                await emptyTable(tablename);
+                await repopulateUserTable();
+                break;
+            case 'counter':
+                await pool.query(`
+                UPDATE counter SET count = 0;
+                `);
+                break;
+            default:
+                console.log('WARNING: couldnt reset table - invalid tablename');
         }
     } catch (e) {
         console.log(e);
@@ -194,34 +214,13 @@ async function repopulateUserTable() {
     }
 }
 
-async function logUser(id = null) {
-    try {
-        if (id == null) {
-            const users = await fetchUser();
-            console.log('\n\nALL USERS:');
-            console.log(users);
-        }
-        else {
-            const user = await fetchUser(id);
-            console.log('\n\nUSER FOUND:')
-            console.log(user);
-        }
-    } catch (e) {
-        console.log(e);
-    } 
-}
-// templog('another one', 'haha lmao');
-
-// logUser();
-
-// resetDb();
-
 // resetTable('uploads');
+// resetTable('counter')
 
 // incrementModelAmountCounter();
 
 module.exports = {
     fetchUser, fetchUserByUsername, createUser,
-    fetchUpload, storeUpload,
+    fetchUpload, storeUpload, deleteUpload,
     fetchModelAmountCounter, incrementModelAmountCounter
 }

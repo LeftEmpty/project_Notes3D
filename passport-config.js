@@ -36,7 +36,6 @@ async function initialize(passport) {
             return done(null, {
                 id: user.id,
                 username: user.username
-                // !TODO add uploaded meshes, etc
             });
         });
     });
