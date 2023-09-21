@@ -13,7 +13,7 @@ uploadForm.addEventListener("submit", (event) => {
 
     // create form data body
     const formData = new FormData();
-    const noteField = document.querySelector('#upload-note');
+    const noteField = document.querySelector('#new-upload--note');
     const filesField = document.querySelector('#upload-files');
     const filesUsername = document.querySelector('#upload-user');
 
@@ -60,7 +60,7 @@ function delUpload(id) {
     fetch (url, {
         method: 'DELETE'
     })
-    .then (response => response.json())
+    .then(response => response.json())
     .then(data => {
         console.log(data);
         location.reload();
@@ -69,14 +69,15 @@ function delUpload(id) {
 
 // EDITING UPLOAD
 const editForm = document.querySelector('#edit-upload-form');
-console
 
 editForm.addEventListener("submit", (event) => {
     // prevent default form submit
     event.preventDefault();
 
-    const noteField = document.querySelector('#cur-upload-note');
+    const noteField = document.querySelector('#cur-upload--note');
     const url = uploadsURL + editForm.querySelector('#btn--cur-note--submit').getAttribute('data-id');
+
+    console.log(url);
 
     fetch(url, {
         method: 'PUT',
@@ -85,7 +86,7 @@ editForm.addEventListener("submit", (event) => {
         },
         body: JSON.stringify({ note: noteField.value })
     })
-    .then (response => response.json())
+    .then(response => response.json())
     .then(data => {
         console.log(data);
         location.reload();

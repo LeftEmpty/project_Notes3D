@@ -80,6 +80,10 @@ app.get('/', (req, res) => {
 });
 
 app.get('/profile', ensureAuthenticated, async (req, res) => {
+    res.redirect('/profile/' + req.user.username);
+});
+
+app.get('/profile/:username', ensureAuthenticated, async (req, res) => {
     const messages = req.flash();
     res.render('profile.ejs', {
         // current user
@@ -184,9 +188,11 @@ app.get('/uploads/:id', ensureAuthenticated, async (req, res) => {
                 // uploads
                 uploadlist: await fetchUpload(req.user.username),
                 selectedUpload: selectedUpload,
+                uploadid: id
             });
         } else {
-            res.status(404).send('Mesh not found'); // !TODO should make an 404 page
+            // redirect to profile / uploads page when no mesh found or current mesh deleted
+            res.status(404).redirect('/profile/' + req.user.username);
         }
     } catch (error) {
         console.error(error);
@@ -225,7 +231,7 @@ app.put('/uploads/:id', ensureAuthenticated, async (req, res) => {
             ' | new note: ' + req.body.note);
         
         await editUpload(req.user.username, req.params.id, req.body.note);
-
+        res.json({ message: 'Note updated successfully!' });
     } catch (e) {
         console.log(e);
     }
