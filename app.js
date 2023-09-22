@@ -165,8 +165,43 @@ app.post('/register', async (req, res) => {
 });
 
 // uplaods
-app.get('/uploads/:id', ensureAuthenticated, async (req, res) => {
+app.get('/uploads', ensureAuthenticated, async (req, res) => {
+    try {
+        res.redirect('/uploads/' + req.user.username);
+    } catch (e) {
+        res.status(500).redirect('/profile');
+    }
+})
+
+app.get('/uploads/:username', ensureAuthenticated, async (req, res) => {
     const messages = req.flash();
+    const user = req.params.user;
+    try {
+        // page with current mesh
+        res.render('upload.ejs', {
+            // current user
+            username: req.user == null ? 'no username' : req.user.username,
+            id: req.user == null ? 'noid' : req.user.id,
+            // login / register popup forms
+            messages: messages,
+            bLoggedIn: req.user == null ? false :true,
+            temploginusername: "",
+            temploginpassword: "",
+            tempregisterusername: "",
+            tempregisterpassword1: "",
+            tempregisterpassword2: "",
+            // uploads
+            uploadlist: await fetchUpload(req.user.username)
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(500).send('Internal Server Error');
+    }
+})
+
+app.get('/uploads/:username/:id', ensureAuthenticated, async (req, res) => {
+    const messages = req.flash();
+    const user = req.params.user;
     const id = req.params.id;
     try {
         // fetch upload via id
@@ -194,8 +229,8 @@ app.get('/uploads/:id', ensureAuthenticated, async (req, res) => {
             // redirect to profile / uploads page when no mesh found or current mesh deleted
             res.status(404).redirect('/profile/' + req.user.username);
         }
-    } catch (error) {
-        console.error(error);
+    } catch (e) {
+        console.log(e);
         res.status(500).send('Internal Server Error');
     }
 });

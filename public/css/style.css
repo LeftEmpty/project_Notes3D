@@ -84,12 +84,17 @@ header button{
 
 #new-upload--note{
     width: 100%;
-    min-height: 180px;
+    min-height: 80px;
+    max-height: 120px;
+    margin-top: 12px;
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
     outline: none;
     border-radius: 6px;
 }
+
+
+
 
 #edit-upload-form {
     display: flex;
@@ -124,6 +129,11 @@ header button{
     border: none;
 }
 
+.cur-note--readonly{
+    outline: none;
+    background:#333;
+    border: solid 1px #333;
+}
 
 
 #upload-files{
@@ -199,6 +209,13 @@ header button{
 .iu-box--title{
     margin-top:100px;
     margin-bottom:40px;
+}
+
+.iu-box--profile-img {
+    position: relative;
+    margin-top:-100px;
+    margin-bottom: 40px;
+    z-index:99;
 }
 
 /* steps */
@@ -347,7 +364,7 @@ header button{
 .form-row-btn-row {
     display: flex;
     justify-content: space-between;
-    margin: 12px 12px 0 12px!important;
+    margin-top: 12px!important;
 }
 
 .iu-box--banner {
@@ -374,7 +391,22 @@ header button{
 
 /* profile */
 .iu-box--profile {
-    width:80%;
+    width:70%;
+}
+
+.iu-content--profile .iu-profile--title {
+    text-transform: uppercase;
+    font-size: 32px;
+    font-weight:100;
+    letter-spacing: 1px;
+    margin: 1em 0;
+}
+
+.iu-profile-card {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 4px;
 }
 
 .iu-content--profile {
@@ -382,25 +414,88 @@ header button{
     justify-content: space-between;
 }
 
-.profile--img > img {
-    width:160px;
-    height:160px;
+.iu-profile--img {
+    padding: 6px;
+    background: #000;
+    margin: 1em;
+    border-radius: 4px;
+    display: flex;
 }
 
-.profile--desc {
-    width: 50%;
-    background: #fff;
+.iu-profile--img > img {
+    width:240px;
+    height:240px;
+    border-radius:4px;
+}
+
+.iu-profile--desc {
+    border-radius: 4px;
     color: var(--main-color);
     padding: 40px;
-    margin-left: 60px;
-    margin-top: -100px;
-    padding-left: 120px;
+    display:flex;
+    flex-direction: column;
 }
+
+.iu-profile--desc hr {
+    background: #000;
+    height: 3px;
+    width: 60%;
+    margin-left: 0;
+}
+
+.profile--desc b {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.iu-box--fl {
+    width: 30%;
+}
+
+
+.iu-friendlist > ul {
+    padding: 0;
+    margin: 0;
+    overflow: auto;
+    max-height:365px;
+}
+
+.iu-friendlist li.singlefr {
+    list-style: none;
+    padding: 0.2em;
+    margin: .5em .5em 0 0;
+    background: #fff;
+    border-radius: 50px;
+    display:flex;
+    align-items: center;
+}
+
+.iu-friendlist li.singlefr > img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 1em;
+}
+.iu-friendlist li.singlefr p {
+    margin: 0.15em 0;
+    color:#000;
+    font-size: 18px;
+}
+
+.iu-friendlist li.singlefr p.singlefr--company {
+    color: #777;
+    font-weight: 300;
+}
+
 
 /* mesh viewer [abbreviation: mv]*/
 .iu-row-wrapper--mv * {
     margin:0;
     padding:0;
+}
+
+.iu-row-wrapper--mv h2 {
+    font-size: 48px;
 }
 
 .iu-mv{
@@ -410,45 +505,10 @@ header button{
     background: var(--off-black-color);
 }
 
-/* uploaded meshes [abbreviation: um] */
-/*
-.iu-um-list{
-    padding:0;
-    margin:20px auto;
-}
-
-.iu-um-list > .iu-um {
-    display: grid;
-    grid-template-columns: 24px 1fr 60px;
-    background:var(--off-white-color);
-    border-radius:6px;
-    height:120px;
-    margin:10px 0;
-    cursor: pointer;
-    transition: ease-in .1s;
-}
-
-
-
-
-
-
-.iu-um__title{
-    font-size: 24px;
-    color:var(--main-color);
-}
-
-.iu-um__desc .iu-um__date,
-.iu-um__desc .iu-um__filename {
-    padding: 0 32px 0 4px;
-    font-style: italic;
-}
-
-
-
 /* uploads page */
 .iu-content--mv-left {
     position: relative;
+    height:fit-content;
 }
 
 .iu-box--edit-form {
@@ -483,33 +543,36 @@ header button{
 
 #cur-upload--note,
 #new-upload--note {
+    padding:.4em;
     background:#222;
     color:var(--off-white-color);
     resize: none;
-}
-
-.iu-box--title > h2 {
-    font-size: 48px;
 }
 
 .iu-um-list {
     padding: 0;
     max-height: 60vh;
     overflow-y: auto;
-    scrollbar-gutter: stable;
     /*
+    scrollbar-gutter: stable;
     scrollbar-width: thin;
     scrollbar-color: #666 #444;
     */
 }
 
-#iu-um-list::-webkit-scrollbar {
+#iu-um-list::-webkit-scrollbar,
+.iu-note::-webkit-scrollbar,
+.iu-friendlist > ul::-webkit-scrollbar {
     width:.5em;
 }
-#iu-um-list::-webkit-scrollbar-thumb {
+#iu-um-list::-webkit-scrollbar-thumb,
+.iu-note::-webkit-scrollbar-thumb,
+.iu-friendlist > ul::-webkit-scrollbar-thumb {
     background-color: #777;
 }
-#iu-um-list::-webkit-scrollbar-track {
+#iu-um-list::-webkit-scrollbar-track,
+.iu-note::-webkit-scrollbar-track,
+.iu-friendlist > ul::-webkit-scrollbar-track {
     background-color: #555;
 }
 
@@ -518,7 +581,7 @@ header button{
     justify-content: space-between;
     background: #fff;
     border-radius: 4px;
-    margin: 6px;
+    margin: 6px 0;
 }
 
 .iu-um-list > .iu-um:hover {
@@ -781,4 +844,72 @@ button.iu-page-selection-btn {
     display:flex;
     flex-direction:row;
     justify-content:start;
+}
+
+.iu-row-margin {
+    margin: 40px 0;
+}
+.iu-row-margin-btm {
+    margin-bottom: 80px;
+}
+
+
+/* footer */
+.iu-footer {
+    color: #000;
+    background: #fff;
+}
+
+.iu-footer {
+    /*margin-top: 120px;*/
+    padding: 80px 0;
+}
+
+.iu-footer .iu-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.iu-box--footer h3 {
+    margin-bottom: 1em;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.iu-box--footer p {
+    margin: .5em 0;
+}
+
+/* two cols */
+.iu-row--two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.iu-two-col--box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5em 10em;
+    min-height: 50vh;
+}
+
+.iu-two-col--box--black {
+    background: #fff;
+    color: #000;    
+}
+
+.iu-two-col--box--white {
+    background: #000;
+    color: #fff;
+}
+
+.iu-two-col__img > img {
+    max-width:unset;
+}
+
+.iu-two-col__text h5 {
+    font-weight:100;
+    font-size: 48px;
 }

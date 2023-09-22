@@ -11,70 +11,81 @@
                 </model-viewer>
             </div>
 
-            <div class="iu-box iu-box--edit-form">
-                <form id="edit-upload-form">
-                    <label for="cur-upload-note">Note</label>
-                    <textarea name="cur-upload-note" id="cur-upload--note" cols="48" rows="10"><%= locals.selectedUpload.note %></textarea>
-                    <div class="form-row-btn-row">
-                        <a id="btn--cur-note--edit"><i class="fa-solid fa-pen"></i></a>
-                        <button data-id="<%= locals.selectedUpload.id %>" type="submit" id="btn--cur-note--submit"><i class="fa-solid fa-check"></i></button>
-                    </div>
-                </form>
-            </div>
             
         </div>
         <div class="iu-content iu-content--mv-right">
-            <div class="iu-mv-right--container">
-                <div class="list-container">
-                    <div class="iu-box iu-box--title">
-                        <h2>Your Uploads, <%= locals.username %></h2>
-                    </div>
-                    <div class="iu-box">
-                        <ul id="iu-um-list" class="iu-um-list">
-                            <% for(const upload of locals.uploadlist) { %>
-                                <div class="iu-um <% if(locals.uploadid == upload.id) { %>iu-um--active<% } %>">
-                                    <div class="iu-um__color"></div>
-                                    <a class="iu-um__desc" href="/uploads/<%= upload.id %>">
-                                        <h4 class="iu-um__title"><%= upload.originalFileName %></h4>
-                                        <p><b>Note: </b><span class="iu-um__filename"><%= upload.note.substring(0,25) %> <% if(upload.note.length > 25) { %> <span>...</span> <% } %></span></p>
-                                        <p><b>Upload date: </b><span class="iu-um__date"><%= upload.created %></span></p>
-                                        <p><b>Filesize: </b><span class="iu-um__filename"><%= (upload.fileSize / 1000) - ((upload.fileSize / 1000) % 1) + ' KB'  %></span></p>
-                                    </a>
-                                    <div class="iu-um__del">
-                                        <a class="iu_um_delanchor" data-id="<%= upload.id %>"></a>
-                                        <i class="fa-solid fa-trash"></i>
-                                    </div>
-                                </div>
-                            <% } %>
-                            <% if(locals.uploadlist.length == 0) { %>
-                                <h4>you have not uploaded anything yet.</h4>
-                            <% } %>
-                        </ul>
-                    </div>
-                </div>
-
+            <div class="iu-box iu-box--title">
+                <h2>Your Uploads, <%= locals.username %></h2>
+            </div>
+            <div class="list-container">
                 <div class="iu-box">
-                    <div class="iu-box iu-box--title">
-                        <h2>New Upload</h2>
-                    </div>
-                    <div class="button">
-                        <form id="file-upload-form">
-                            <input type="text" name="upload-user" value="<%= locals.username %>" id="upload-user" readonly>
-                            <label for="upload-note" class="">Note:</label>
-                            <textarea name="upload-note" id="new-upload--note" placeholder="this note is applied to all uploads"></textarea>
-                            <div class="form-row-btn-row">
-                                <label for="upload-files" class="iu-btn--colored file-upload-custom-styling">Select Files</label>
-                                <input type="file" name="upload-file" id="upload-files" multiple>
-                                <button type="submit" id="upload-submit"><i class="fa-solid fa-check"></i></button>
+                    <ul id="iu-um-list" class="iu-um-list">
+                        <% for(const upload of locals.uploadlist) { %>
+                            <div class="iu-um <% if(locals.params.id == upload.id) { %>} %>">
+                                <div class="iu-um__color"></div>                            
+                                <div class="iu-um__desc">
+                                    <a href="/uploads/<%= upload.id %>">
+                                    <h4 class="iu-um__title"><%= upload.originalFileName %></h4>
+                                    <p><b>Note: </b><span class="iu-um__filename"><%= upload.note.substring(0,25) %> <% if(upload.note.length > 25) { %> <span>...</span> <% } %></span></p>
+                                    <p><b>Upload date: </b><span class="iu-um__date"><%= upload.created %></span></p>
+                                    <p><b>Filesize: </b><span class="iu-um__filename"><%= (upload.fileSize / 1000) - ((upload.fileSize / 1000) % 1) + ' KB'  %></span></p>
+                                    </a>
+                                </div>
+                                <div class="iu-um__del">
+                                    <a class="" data-id="<%= upload.id %>"></a>
+                                    <i class="fa-solid fa-trash"></i>
+                                </div>
                             </div>
-                        </form>
-                    </div>
+                        <% } %>
+                        <% if(locals.uploadlist.length == 0) { %>
+                            <h4>you have not uploaded anything yet.</h4>
+                        <% } %>
+                    </ul>
                 </div>
             </div>
+            
 
+        </div>
+    </div>
+</div>
+
+<div class="iu-row-wrapper">
+    <div class="iu-row">
+        <div class="iu-content">
+            
         </div>
     </div>
 </div>
 
 </body>
 </html>
+
+<div class="iu-box">
+    <form id="edit-upload-form">
+        <label for="cur-upload-note"></label>
+        <textarea name="cur-upload-note" id="cur-upload-note" cols="30" rows="10"><%= locals.selectedUpload.note %></textarea>
+        <a id="btn--cur-note--edit"><i class="fa-regular fa-pen-to-square"></i></a>
+        <button data-id="<%= locals.selectedUpload.id %>" type="submit" id="btn--cur-note--submit"><i class="fa-solid fa-check"></i></button>
+    </form>
+</div>
+
+
+<div class="temp">
+    
+
+    
+
+    <div class="iu-box">
+        <div class="button">
+            <form id="file-upload-form">
+                <input type="text" name="upload-user" value="<%= locals.username %>" id="upload-user" readonly>
+                <label for="upload-note" class="">Note</label>
+                <textarea resize="none" name="upload-note" id="upload-note"></textarea>
+                <label for="upload-files" class="file-upload-custom-styling">Select Files</label>
+                <input type="file" name="upload-file" id="upload-files" multiple>
+                <button type="submit" id="upload-submit"><i class="fa-solid fa-check"></i></button>
+            </form>
+        </div>
+    </div>
+
+</div>
