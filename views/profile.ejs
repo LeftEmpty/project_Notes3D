@@ -1,4 +1,4 @@
-<div class="iu-row-wrapper iu-row-wrapper--full-width iu-row-wrapper--banner">
+<div class="iu-row-wrapper iu-row-wrapper--full-width iu-row-wrapper--banner iu-row-margin-btm">
     <div class="iu-bg-opacity"></div>
     <div class="iu-row iu-row--banner">
         <div class="iu-content">
@@ -9,18 +9,8 @@
                     </div>
                 </div>
                 <div class="iu-banner__img">
-                    <img src="media/banner-mannequin.png" alt="banner-mannequin-img">
+                    <img src="/media/banner-mannequin.png" alt="banner-mannequin-img">
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="iu-row-wrapper">
-    <div class="iu-row">
-        <div class="iu-content">
-            <div class="iu-box iu-box--title">
-                <h2>Profile</h2>
             </div>
         </div>
     </div>
@@ -32,23 +22,72 @@
             
             <div class="iu-box iu-box--profile">
                 <div>
-                    <div class="profile--img">
+                    <h4 class="iu-profile--title">You</h4>
+                </div>
+                <div class="iu-profile-card">
+                    <div class="iu-profile--img">
                         <img src="/media/placeholder-img.png" alt="your profile image">
                     </div>
-                    <div class="profile--desc">
+                    <div class="iu-profile--desc">
                         <p><b>Username:</b> <span><%= locals.username %></span></p>
+                        <hr>
+                        <p><b>Company:</b> <span><%= '!TODO' %></span></p>
+                        <hr>
                         <p><b>Uploads:</b> <span><%= '!TODO' %></span></p>
-                        <p><b>Friends:</b> <span><%= '!TODO' %></span></p>
                     </div>
                 </div>
             </div>
             <div class="iu-box iu-box--fl">
-                <ul>
-                    <li>Friend 1</li>
-                    <li>Friend 2</li>
-                    <li>Friend 3</li>
-                    <li>Friend 4</li>
-                </ul>
+                <div>
+                    <h4 class="iu-profile--title">Friends [0]</h4>
+                </div>
+                <div class="iu-friendlist">
+                    <ul>
+                        <li class="singlefr">
+                            <img src="/media/placeholder-img.png" alt="friends profile picture">
+                            <div>
+                                <p class="singlefr--name">NAME</p>
+                                <p class="singlefr--company">COMPANY</p>
+                            </div>
+                        </li>
+                        <li class="singlefr">
+                            <img src="/media/placeholder-img.png" alt="friends profile picture">
+                            <div>
+                                <p class="singlefr--name">NAME</p>
+                                <p class="singlefr--company">COMPANY</p>
+                            </div>
+                        </li>
+                        <li class="singlefr">
+                            <img src="/media/placeholder-img.png" alt="friends profile picture">
+                            <div>
+                                <p class="singlefr--name">NAME</p>
+                                <p class="singlefr--company">COMPANY</p>
+                            </div>
+                        </li>
+                        <li class="singlefr">
+                            <img src="/media/placeholder-img.png" alt="friends profile picture">
+                            <div>
+                                <p class="singlefr--name">NAME</p>
+                                <p class="singlefr--company">COMPANY</p>
+                            </div>
+                        </li>
+                        <li class="singlefr">
+                            <img src="/media/placeholder-img.png" alt="friends profile picture">
+                            <div>
+                                <p class="singlefr--name">NAME</p>
+                                <p class="singlefr--company">COMPANY</p>
+                            </div>
+                        </li>
+                        <li class="singlefr">
+                            <img src="/media/placeholder-img.png" alt="friends profile picture">
+                            <div>
+                                <p class="singlefr--name">NAME</p>
+                                <p class="singlefr--company">COMPANY</p>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
             </div>
 
         </div>
@@ -66,7 +105,7 @@
 </div>
 
 <!-- uploaded meshes -->
-<div class="iu-row-wrapper">
+<div class="iu-row-wrapper iu-row-margin iu-row-margin-btm">
     <div class="iu-row">
         <div class="iu-content">
             <div class="iu-box">
