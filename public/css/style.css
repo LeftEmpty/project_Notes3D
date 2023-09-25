@@ -520,6 +520,13 @@ header button{
     border-radius: 4px;
 }
 
+.iu-content--mv-right > .iu-mv-right--container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding: 1em 1em;
+}
 
 .iu-content--mv-right > .list-container {
     height: -webkit-fill-available;
@@ -884,14 +891,14 @@ button.iu-page-selection-btn {
 /* two cols */
 .iu-row--two-col {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 50% 50%;
 }
 
 .iu-two-col--box {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 5em 10em;
+    padding: 5em 22%;
     min-height: 50vh;
 }
 
@@ -907,6 +914,7 @@ button.iu-page-selection-btn {
 
 .iu-two-col__img > img {
     max-width:unset;
+    width:100%;
 }
 
 .iu-two-col__text h5 {

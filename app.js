@@ -201,11 +201,11 @@ app.get('/uploads/:username', ensureAuthenticated, async (req, res) => {
 
 app.get('/uploads/:username/:id', ensureAuthenticated, async (req, res) => {
     const messages = req.flash();
-    const user = req.params.user;
+    const user = req.params.username;
     const id = req.params.id;
     try {
         // fetch upload via id
-        const selectedUpload = await fetchUpload(req.user.username, id);
+        const selectedUpload = await fetchUpload(user, id);
         if (selectedUpload) {
             // page with current mesh
             res.render('upload.ejs', {
@@ -223,7 +223,8 @@ app.get('/uploads/:username/:id', ensureAuthenticated, async (req, res) => {
                 // uploads
                 uploadlist: await fetchUpload(req.user.username),
                 selectedUpload: selectedUpload,
-                uploadid: id
+                uploadid: id,
+                uploaduser: user
             });
         } else {
             // redirect to profile / uploads page when no mesh found or current mesh deleted
