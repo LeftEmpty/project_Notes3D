@@ -898,7 +898,7 @@ button.iu-page-selection-btn {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 5em 22%;
+    padding: 5em 23%;
     min-height: 50vh;
 }
 
@@ -920,4 +920,23 @@ button.iu-page-selection-btn {
 .iu-two-col__text h5 {
     font-weight:100;
     font-size: 48px;
+}
+
+/* profile */
+.iu-contacts-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#btn-contactPopup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    width: 32px;
+    border-radius: 2px;
+    font-size: 32px;
+    font-weight: 100;
+    cursor: pointer;
 }

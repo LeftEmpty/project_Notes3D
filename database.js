@@ -69,9 +69,104 @@ async function createUser(username, password) {
     }
 }
 
+// CONTACTS
+async function fetchContactlist(username) {
+    try {
+        if (await fetchUserByUsername(username) == null) {
+            throw new Error('ERROR: fetchContactlist - no user with that username found');
+        }
+        const [rows] = await pool.query(`
+        SELECT contacts
+        FROM users
+        WHERE username = ?
+        `, [username]); // prepared statement
+        let arr = []
+        if (rows[0].contacts != null) {
+            arr = rows[0].contacts.split(',').filter(Boolean);
+        }
+        return arr;
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+async function fetchContactUsers(username) {
+    try {
+        // get list of usernames in contact list
+        const arr = await fetchContactlist(username);
+        // return empty array if none found
+        // get user data via usernames, add into array and return
+        const contacts = [];
+        for (let i = 0; i < arr.length; i++) {
+            contacts.push(await fetchUserByUsername(arr[i]));
+        }
+        // console.log(contacts);
+        return contacts;
+    } catch (e) {
+        console.log(e);
+        
+    }
+}
+
+async function addContact(username, contactUsername) {
+    try {
+        // check if other user is valid
+        if (await fetchUserByUsername(contactUsername) == null){
+            throw new Error('ERROR: addContact - no user with that username found');
+        }
+        // check if other user is already in contactlist
+        const tmp = await fetchContactlist(username);
+        for (let i = 0; i < tmp.length; i++) {
+            if (tmp[i] == contactUsername) {
+                throw new Error('ERROR: addContact - user already in contactlist');
+            }
+        }
+        tmp.push(contactUsername)
+        const list = tmp.join(',');
+        await setContactlist(username, list);
+        return true;
+    } catch (e) {
+        console.log(e);
+        return false;
+    }
+}
+
+async function removeContact(username, contactUsername) {
+    try {
+        // check if other user is valid
+        if (await fetchUserByUsername(contactUsername) == null){
+            throw new Error('ERROR: removeContact - no user with that username found');
+        }
+        const tmp = await fetchContactlist(username);
+        // check if other user is not in contactlist
+        for (let i = 0; i < tmp.length; i++) {
+            if (tmp[i] != contactUsername && i == tmp.length) {
+                throw new Error('ERROR: removeContact - no user with that username in your contactlist');
+            }
+        }
+        const list = tmp.filter((word) => word != contactUsername).join(',');;
+        await setContactlist(username, list);
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+async function setContactlist(username, newList) {
+    const result = await pool.query(`
+    UPDATE users
+    SET contacts = ?
+    WHERE username = ?
+    `, [newList, username]);
+    return result.insertId;
+}
+
 // UPLOADS
 async function fetchUpload(user, id = null) {
     try {
+        // check user validity
+        if (user == null) {
+            throw new Error('ERROR: fetchUpload - invalid user');
+        }
         // get single upload
         if (id != null) {
             const [rows] = await pool.query(`
@@ -122,6 +217,7 @@ async function storeUpload(username, note, fileName, originalFileName, filePath,
         console.log(e)
     }
 }
+
 
 async function editUpload(user, id, newNote) {
     try {
@@ -238,5 +334,6 @@ async function repopulateUserTable() {
 module.exports = {
     fetchUser, fetchUserByUsername, createUser,
     fetchUpload, storeUpload, deleteUpload, editUpload,
+    fetchContactlist, fetchContactUsers, addContact, removeContact,
     fetchModelAmountCounter, incrementModelAmountCounter
 }

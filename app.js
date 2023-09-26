@@ -18,6 +18,7 @@ const fs = require('fs');
 const {
     fetchUser, fetchUserByUsername, createUser,
     fetchUpload, storeUpload, deleteUpload, editUpload,
+    fetchContactlist, fetchContactUsers, addContact, removeContact,
     fetchModelAmountCounter, incrementModelAmountCounter
 } = require('./database.js');
 
@@ -83,12 +84,32 @@ app.get('/profile', ensureAuthenticated, async (req, res) => {
     res.redirect('/profile/' + req.user.username);
 });
 
+app.put('/profile/:username', ensureAuthenticated, async (req, res) => {
+    try {
+        console.log('add friend: ' + req.params.username);
+        await addContact(req.user.username, req.params.username);
+        res.json({ message: 'Contact added successfully!' });
+    } catch (e) {
+        console.log(e);
+    }
+});
+
+app.delete('/profile', ensureAuthenticated, async (req, res) => {
+
+});
+
 app.get('/profile/:username', ensureAuthenticated, async (req, res) => {
     const messages = req.flash();
+
+    const contacts = await fetchContactUsers(req.user.username);
+
     res.render('profile.ejs', {
         // current user
         username: req.user == null ? 'no username' : req.user.username,
         id: req.user == null ? 'noid' : req.user.id,
+        company: req.user.company == null ? '-' : req.user.company,
+        // contacts
+        contactlist: contacts,
         // login / register popup forms
         messages: messages,
         bLoggedIn: req.user == null ? false :true,
@@ -184,7 +205,7 @@ app.get('/uploads/:username', ensureAuthenticated, async (req, res) => {
             id: req.user == null ? 'noid' : req.user.id,
             // login / register popup forms
             messages: messages,
-            bLoggedIn: req.user == null ? false :true,
+            bLoggedIn: req.user == null ? false : true,
             temploginusername: "",
             temploginpassword: "",
             tempregisterusername: "",

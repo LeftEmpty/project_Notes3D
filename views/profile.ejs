@@ -1,3 +1,29 @@
+<!-- popup -->
+<div class="iu-popup iu-popup--contact">
+    <div class="iu-btn--close iu-btn--contact-close">&times;</div>
+    <!-- login form -->
+    <form action="/login" method="POST" class="iu-form iu-form--contact">
+        <h3>Add Contact</h3>
+        <div class="iu-form-element">
+            <label for="contactUsername">Username</label>
+            <input type="text" id="contact-username" name="contactusername" placeholder="Enter contact" required value="">
+        </div>
+        <div class="iu-form-element iu-form-element--submit">
+            <button type="submit" class="iu-btn--colored">Add</button>
+        </div>
+        <div class="iu-form-element">
+            <!-- Display error messages if they exist -->
+            <% if (messages.error) { %>
+                <ul>
+                    <% messages.error.forEach(message => { %>
+                        <li><%= "this is:" + message %></li>
+                    <% }); %>
+                </ul>
+            <% } %> 
+        </div>
+    </form>
+</div>
+
 <div class="iu-row-wrapper iu-row-wrapper--full-width iu-row-wrapper--banner iu-row-margin-btm">
     <div class="iu-bg-opacity"></div>
     <div class="iu-row iu-row--banner">
@@ -31,60 +57,31 @@
                     <div class="iu-profile--desc">
                         <p><b>Username:</b> <span><%= locals.username %></span></p>
                         <hr>
-                        <p><b>Company:</b> <span><%= '!TODO' %></span></p>
+                        <p><b>Company:</b> <span><%= locals.company %></span></p>
                         <hr>
                         <p><b>Uploads:</b> <span><%= '!TODO' %></span></p>
                     </div>
                 </div>
             </div>
             <div class="iu-box iu-box--fl">
-                <div>
-                    <h4 class="iu-profile--title">Contacts [0]</h4>
+                <div class="iu-contacts-container">
+                    <h4 class="iu-profile--title">Contacts [ <%if(locals.contactlist != 0){%><%=locals.contactlist.length%><%}else{%>0<%}%> ]</h4>
+                    <button class="iu-btn--colored" id="btn-contactPopup">+</button>
                 </div>
                 <div class="iu-friendlist">
                     <ul>
-                        <li class="singlefr">
-                            <img src="/media/placeholder-img.png" alt="friends profile picture">
-                            <div>
-                                <p class="singlefr--name">NAME</p>
-                                <p class="singlefr--company">COMPANY</p>
-                            </div>
-                        </li>
-                        <li class="singlefr">
-                            <img src="/media/placeholder-img.png" alt="friends profile picture">
-                            <div>
-                                <p class="singlefr--name">NAME</p>
-                                <p class="singlefr--company">COMPANY</p>
-                            </div>
-                        </li>
-                        <li class="singlefr">
-                            <img src="/media/placeholder-img.png" alt="friends profile picture">
-                            <div>
-                                <p class="singlefr--name">NAME</p>
-                                <p class="singlefr--company">COMPANY</p>
-                            </div>
-                        </li>
-                        <li class="singlefr">
-                            <img src="/media/placeholder-img.png" alt="friends profile picture">
-                            <div>
-                                <p class="singlefr--name">NAME</p>
-                                <p class="singlefr--company">COMPANY</p>
-                            </div>
-                        </li>
-                        <li class="singlefr">
-                            <img src="/media/placeholder-img.png" alt="friends profile picture">
-                            <div>
-                                <p class="singlefr--name">NAME</p>
-                                <p class="singlefr--company">COMPANY</p>
-                            </div>
-                        </li>
-                        <li class="singlefr">
-                            <img src="/media/placeholder-img.png" alt="friends profile picture">
-                            <div>
-                                <p class="singlefr--name">NAME</p>
-                                <p class="singlefr--company">COMPANY</p>
-                            </div>
-                        </li>
+                        <% for(const contact of locals.contactlist) { %>
+                            <li class="singlefr">
+                                <img src="/media/placeholder-img.png" alt="friends profile picture">
+                                <div>
+                                    <p class="singlefr--name"><%= contact.username %></p>
+                                    <p class="singlefr--company"><%= contact.company == null ? 'NO COMPANY' : contact.company %></p>
+                                </div>
+                            </li>
+                        <% } %>
+                        <% if(locals.contactlist.length == 0) { %>
+                            <h4>you have not added any contacts yet.</h4>
+                        <% } %>
                     </ul>
                 </div>
             </div>

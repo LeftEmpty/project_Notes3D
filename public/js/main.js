@@ -15,7 +15,7 @@ document.querySelector('#iu-popup--logout-btn').addEventListener("click", functi
     fetch('/logout', {
         method: "POST"
     })
-})
+});
 
 function openPopup(page = null) {
     console.log('open');

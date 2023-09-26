@@ -5,7 +5,8 @@ CREATE TABLE users (
     id integer PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(255) NOT NULL UNIQUE,
     company VARCHAR(255),
-    friendlist TEXT,
+    contacts TEXT,
+    
     password VARCHAR(255) NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT NOW()
 );
