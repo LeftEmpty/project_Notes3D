@@ -30,8 +30,8 @@
         <div class="iu-content">
             <div class="iu-box iu-box--banner">
                 <div class="iu-banner__text">
-                    <div class="iu-logo">
-                        <h2>Your Profile, <%= locals.username %></h2>
+                    <div class="iu-logo iu-logo--profile">
+                        <h2><%if(locals.ownProfile == true){%>Your Profile, <%= locals.username %><%}else{ %><%= locals.profileUsername + '\'s Profile' %><%}%></h2>
                     </div>
                 </div>
                 <div class="iu-banner__img">
@@ -47,30 +47,34 @@
         <div class="iu-content iu-content--profile">
             
             <div class="iu-box iu-box--profile">
-                <div>
-                    <h4 class="iu-profile--title">You</h4>
+                <div class="flex">
+                    <h4 class="iu-profile--title"><%if(locals.ownProfile == true){%>YOU<%}else{ %><%= locals.profileUsername%><%}%></h4>
+                    <%if(locals.ownProfile == false) { %>
+                        <button class="iu-btn--colored iu-btn--removeContact" id="btn-removeContact">-</button>
+                    <% } %>
                 </div>
                 <div class="iu-profile-card">
                     <div class="iu-profile--img">
                         <img src="/media/placeholder-img.png" alt="your profile image">
                     </div>
                     <div class="iu-profile--desc">
-                        <p><b>Username:</b> <span><%= locals.username %></span></p>
+                        <p><b>Username:</b> <span><%= locals.profileUsername %></span></p>
                         <hr>
-                        <p><b>Company:</b> <span><%= locals.company %></span></p>
+                        <p><b>Company:</b> <span><%= locals.profileCompany %></span></p>
                         <hr>
-                        <p><b>Uploads:</b> <span><%= '!TODO' %></span></p>
+                        <p><b>Uploads:</b> <span><%= locals.profileUploadlist.length %></span></p>
                     </div>
                 </div>
             </div>
             <div class="iu-box iu-box--fl">
                 <div class="iu-contacts-container">
-                    <h4 class="iu-profile--title">Contacts [ <%if(locals.contactlist != 0){%><%=locals.contactlist.length%><%}else{%>0<%}%> ]</h4>
+                    <h4 class="iu-profile--title">Your Contacts [ <%if(locals.contactlist != 0){%><%=locals.contactlist.length%><%}else{%>0<%}%> ]</h4>
                     <button class="iu-btn--colored" id="btn-contactPopup">+</button>
                 </div>
                 <div class="iu-friendlist">
                     <ul>
                         <% for(const contact of locals.contactlist) { %>
+                            <a class="singlefr__anchor" href="<%= '/profile/' + contact.username %>">
                             <li class="singlefr">
                                 <img src="/media/placeholder-img.png" alt="friends profile picture">
                                 <div>
@@ -78,6 +82,7 @@
                                     <p class="singlefr--company"><%= contact.company == null ? 'NO COMPANY' : contact.company %></p>
                                 </div>
                             </li>
+                            </a>
                         <% } %>
                         <% if(locals.contactlist.length == 0) { %>
                             <h4>you have not added any contacts yet.</h4>
@@ -94,7 +99,7 @@
     <div class="iu-row">
         <div class="iu-content">
             <div class="iu-box iu-box--title">
-                <h2>Your Uploads</h2>
+                <h2><%if(locals.ownProfile == true){%>Your Uploads<%}else{ %><%= locals.profileUsername + '\'s Uploads' %><%}%></h2>
             </div>
         </div>
     </div>
@@ -106,7 +111,7 @@
         <div class="iu-content">
             <div class="iu-box">
                 <ul id="iu-um-list" class="iu-um-list">
-                    <% for(const upload of locals.uploadlist) { %>
+                    <% for(const upload of locals.profileUploadlist) { %>
                         <div class="iu-um">
                             <div class="iu-um__color">
                                 <!-- color indicator for user !TODO insert username -->
@@ -125,8 +130,13 @@
                             </div>
                         </div>
                     <% } %>
-                    <% if(locals.uploadlist.length == 0) { %>
-                        <h4>you have not uploaded anything yet.</h4>
+                    <% if(locals.profileUploadlist.length == 0) { %>
+                        <h4><%if(locals.ownProfile == true){%>You have<%}else{ %><%= locals.profileUsername + ' has' %><%}%> not uploaded anything yet.</h4>
+                        <% if(locals.ownProfile == true) { %>
+                            <div>
+                                <a class="iu-btn--colored iu-btn--no-uploads" href="<%='/uploads/' + locals.username %>">Upload a model!</a>
+                            </div>
+                        <% } %>
                     <% } %>
                 </ul>
             </div>

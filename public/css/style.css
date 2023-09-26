@@ -34,6 +34,10 @@ html, body{
     color:var(--off-white-color);
 }
 
+button {
+    font-family: 'Roboto', sans-serif;
+}
+
 /* fonts */
 h1,h2,h3,h4,h5,h6{
     margin:0;
@@ -374,6 +378,14 @@ header button{
     min-height: 800px;
 }
 
+.iu-banner__text > .iu-logo--profile {
+    padding: 16px;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 16px #00d4ff;
+}
+
 .iu-banner__text .iu-logo > h3 {
     color:var(--off-white-color);
     font-weight: 100;
@@ -460,6 +472,10 @@ header button{
     max-height:365px;
 }
 
+.iu-friendlist .singlefr__anchor {
+    text-decoration: none;
+}
+
 .iu-friendlist li.singlefr {
     list-style: none;
     padding: 0.2em;
@@ -468,6 +484,10 @@ header button{
     border-radius: 50px;
     display:flex;
     align-items: center;
+}
+
+.iu-friendlist li.singlefr:hover {
+    box-shadow: 0 0 16px #00d4ff;
 }
 
 .iu-friendlist li.singlefr > img {
@@ -842,6 +862,17 @@ button.iu-page-selection-btn {
     text-transform: uppercase;
 }
 
+.iu-btn--no-uploads {
+    display: flex;
+    width: fit-content;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 100;
+    padding: 1em 2em;
+    margin: 1em 0;
+    border-radius: 4px;
+}
+
 /* Utility */
 .white {
     color:var(--off-white-color);
@@ -929,7 +960,18 @@ button.iu-page-selection-btn {
     justify-content: space-between;
 }
 
-#btn-contactPopup {
+.iu-box--profile > div.flex{
+    justify-content: space-between;
+    margin: 1em 0;
+}
+
+.iu-box--profile > div.flex .iu-profile--title {
+    margin: 0;
+}
+
+#btn-contactPopup,
+#btn-removeContact {
+    position:relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -939,4 +981,42 @@ button.iu-page-selection-btn {
     font-size: 32px;
     font-weight: 100;
     cursor: pointer;
+    transition: ease .2s;
 }
+
+#btn-removeContact{
+    background: red;
+}
+
+#btn-removeContact:hover {
+    background: rgb(255, 55, 25);
+}
+
+#btn-contactPopup::after,
+#btn-removeContact::after {
+    display: none;
+    position: absolute;
+    left: 35px;
+    font-size: 14px;
+    font-weight: 600;
+    background: #fff;
+    color: #000;
+    padding: 12px;
+    border-radius: 4px;
+    width: max-content;
+    
+}
+
+#btn-contactPopup::after {
+    content: 'add a contact';
+}
+
+#btn-removeContact::after {
+    content: 'remove this contact';
+}
+
+#btn-contactPopup:hover::after,
+#btn-removeContact:hover::after {
+    display: block;
+}
+

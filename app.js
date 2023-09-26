@@ -86,7 +86,7 @@ app.get('/profile', ensureAuthenticated, async (req, res) => {
 
 app.put('/profile/:username', ensureAuthenticated, async (req, res) => {
     try {
-        console.log('add friend: ' + req.params.username);
+        console.log('add contact: ' + req.params.username);
         await addContact(req.user.username, req.params.username);
         res.json({ message: 'Contact added successfully!' });
     } catch (e) {
@@ -94,20 +94,43 @@ app.put('/profile/:username', ensureAuthenticated, async (req, res) => {
     }
 });
 
-app.delete('/profile', ensureAuthenticated, async (req, res) => {
-
+app.delete('/profile/:username', ensureAuthenticated, async (req, res) => {
+    try {
+        console.log('remove contact: ' + req.params.username + ' from ' + req.user.username);
+        await removeContact(req.user.username, req.params.username);
+        res.json({ message: 'Contact added successfully!' });
+    } catch (e) {
+        console.log(e);
+    }
 });
 
 app.get('/profile/:username', ensureAuthenticated, async (req, res) => {
     const messages = req.flash();
 
     const contacts = await fetchContactUsers(req.user.username);
+    const profileUser = await fetchUserByUsername(req.params.username);
 
+    const bOwnProfile = req.params.username == req.user.username;
+
+    /*
+    console.log('PROFILE USER');
+    console.log(profileUser);
+    console.log('LOGED USER');
+    console.log(req.user);
+
+    console.log('bOwnProfile');
+    console.log(bOwnProfile);
+    */
+   
     res.render('profile.ejs', {
         // current user
         username: req.user == null ? 'no username' : req.user.username,
         id: req.user == null ? 'noid' : req.user.id,
-        company: req.user.company == null ? '-' : req.user.company,
+        // current profile
+        ownProfile: bOwnProfile,
+        profileUsername: profileUser.username,
+        profileCompany: profileUser.company == null ? '-' : req.user.company,
+        profileUploadlist: await fetchUpload(profileUser.username),
         // contacts
         contactlist: contacts,
         // login / register popup forms

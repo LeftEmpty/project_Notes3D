@@ -30,11 +30,11 @@ document.querySelector('.iu-form--contact').addEventListener("submit", (event) =
 });
 
 // remove friend request
-document.querySelector('.btn-contactDel').addEventListener("click", (event) => {
+document.querySelector('#btn-removeContact').addEventListener("click", (event) => {
     // prevent default form submit
     event.preventDefault();
 
-    const url = profileURL + '/' + contactusernameField;
+    const url = window.location.href;
 
     fetch (url, {
         method: 'DELETE'
@@ -42,6 +42,7 @@ document.querySelector('.btn-contactDel').addEventListener("click", (event) => {
     .then(response => response.json())
     .then(data => {
         console.log(data);
-        location.reload();
+        location.href = profileURL;
     })
 });
+

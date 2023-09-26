@@ -111,41 +111,49 @@ async function fetchContactUsers(username) {
 async function addContact(username, contactUsername) {
     try {
         // check if other user is valid
-        if (await fetchUserByUsername(contactUsername) == null){
-            throw new Error('ERROR: addContact - no user with that username found');
+        const contactUser  = await fetchUserByUsername(contactUsername)
+        if (contactUser == null || username.toLowerCase() == contactUsername.toLowerCase()){
+            throw new Error('ERROR: addContact - no valid user with that username found');
         }
+        const list = await fetchContactlist(username);
+        console.log('list')
+        console.log(list)
         // check if other user is already in contactlist
-        const tmp = await fetchContactlist(username);
-        for (let i = 0; i < tmp.length; i++) {
-            if (tmp[i] == contactUsername) {
-                throw new Error('ERROR: addContact - user already in contactlist');
-            }
+        if (list.includes(contactUser.username)) {
+            throw new Error('ERROR: addContact - user already in contactlist');
         }
-        tmp.push(contactUsername)
-        const list = tmp.join(',');
-        await setContactlist(username, list);
-        return true;
+        list.push(contactUser.username);
+        const updatedList = list.join(',');
+        console.log(updatedList);
+        return await setContactlist(username, updatedList);
     } catch (e) {
         console.log(e);
-        return false;
     }
 }
 
 async function removeContact(username, contactUsername) {
     try {
         // check if other user is valid
-        if (await fetchUserByUsername(contactUsername) == null){
+        const contactUser  = await fetchUserByUsername(contactUsername)
+        if (contactUser == null){
             throw new Error('ERROR: removeContact - no user with that username found');
         }
-        const tmp = await fetchContactlist(username);
+        const list = await fetchContactlist(username);
+
+        // make everything case insensitive
+        const lowerContactUsername = contactUsername.toLowerCase();
+        const lowerList = list.map(word => word.toLowerCase());
+
         // check if other user is not in contactlist
-        for (let i = 0; i < tmp.length; i++) {
-            if (tmp[i] != contactUsername && i == tmp.length) {
-                throw new Error('ERROR: removeContact - no user with that username in your contactlist');
-            }
+        if (!lowerList.includes(lowerContactUsername)) {
+            throw new Error('ERROR: removeContact - no user with that username in your contact list');
         }
-        const list = tmp.filter((word) => word != contactUsername).join(',');;
-        await setContactlist(username, list);
+
+        // create updated string contactlist
+        const updatedList = list.filter(word => word.toLowerCase() !== lowerContactUsername).join(',');
+
+        // update contact list with new data
+        await setContactlist(username, updatedList);
     } catch (e) {
         console.log(e);
     }

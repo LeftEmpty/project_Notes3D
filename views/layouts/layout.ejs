@@ -122,6 +122,9 @@
                         <p><a href="/">Home</a></p>
                         <p><a href="/profile">Profile</a></p>
                         <p><a href="/about">About</a></p>
+                        <% if (locals.bLoggedIn) { %>
+                            <p><a href="<%='/uploads/' + locals.username %>">Uploads</a></p>
+                        <% } %>
                     </div>
 
                     <div class="iu-box iu-box--footer">
