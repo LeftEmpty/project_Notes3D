@@ -11,24 +11,27 @@
                 </model-viewer>
             </div>
 
+            <% if (selectedUpload != '') { %>
             <div class="iu-box iu-box--edit-form">
                 <form id="edit-upload-form">
                     <label for="cur-upload-note">Note</label>
-                    <textarea name="cur-upload-note" id="cur-upload--note" cols="48" rows="10"><%= locals.selectedUpload.note %></textarea>
+                    <textarea readonly class="cur-note--readonly" name="cur-upload-note" id="cur-upload--note" cols="48" rows="10"><%= locals.selectedUpload.note %></textarea>
+                    <% if (ownUploads == true) { %>
                     <div class="form-row-btn-row">
                         <a id="btn--cur-note--edit"><i class="fa-solid fa-pen"></i></a>
                         <button data-id="<%= locals.selectedUpload.id %>" type="submit" id="btn--cur-note--submit"><i class="fa-solid fa-check"></i></button>
                     </div>
+                    <% } %>
                 </form>
             </div>
-
+            <% } %>
             
         </div>
         <div class="iu-content iu-content--mv-right">
             <div class="iu-mv-right--container">
                 <div class="list-container">
                     <div class="iu-box iu-box--title">
-                        <h2>Your Uploads, <%= locals.username %></h2>
+                        <h2><%if(locals.ownUploads == true){%>Your Uploads<%} else { %><%=locals.uploaduser.username%>'s Uploads<%}%></h2>
                     </div>
                     <div class="iu-box">
                         <ul id="iu-um-list" class="iu-um-list">
@@ -55,7 +58,8 @@
                         </ul>
                     </div>
                 </div>
-                
+
+                <% if (ownUploads == true) { %>
                 <div class="iu-box">
                     <div class="iu-box iu-box--title">
                         <h2>New Upload</h2>
@@ -73,6 +77,8 @@
                         </form>
                     </div>
                 </div>
+                <% } %>
+
             </div>
         </div>
     </div>

@@ -112,16 +112,6 @@ app.get('/profile/:username', ensureAuthenticated, async (req, res) => {
 
     const bOwnProfile = req.params.username == req.user.username;
 
-    /*
-    console.log('PROFILE USER');
-    console.log(profileUser);
-    console.log('LOGED USER');
-    console.log(req.user);
-
-    console.log('bOwnProfile');
-    console.log(bOwnProfile);
-    */
-   
     res.render('profile.ejs', {
         // current user
         username: req.user == null ? 'no username' : req.user.username,
@@ -219,13 +209,24 @@ app.get('/uploads', ensureAuthenticated, async (req, res) => {
 
 app.get('/uploads/:username', ensureAuthenticated, async (req, res) => {
     const messages = req.flash();
-    const user = req.params.user;
+
+    console.log('USERNAME USERNAME USERNAME USERNAME USERNAME')
+    console.log(req.params.username);
+
+    const user = await fetchUserByUsername(req.params.username);
+    const id = req.params.id;
+    const bOwnUploads = req.params.username == req.user.username;
+
+    console.log('USERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSER')
+    console.log(user)
+
     try {
         // page with current mesh
         res.render('upload.ejs', {
             // current user
             username: req.user == null ? 'no username' : req.user.username,
             id: req.user == null ? 'noid' : req.user.id,
+            ownUploads: bOwnUploads,
             // login / register popup forms
             messages: messages,
             bLoggedIn: req.user == null ? false : true,
@@ -235,7 +236,10 @@ app.get('/uploads/:username', ensureAuthenticated, async (req, res) => {
             tempregisterpassword1: "",
             tempregisterpassword2: "",
             // uploads
-            uploadlist: await fetchUpload(req.user.username)
+            uploadlist: await fetchUpload(user.username),
+            selectedUpload: '',
+            uploadid: id,
+            uploaduser: user
         });
     } catch (e) {
         console.log(e);
@@ -245,17 +249,21 @@ app.get('/uploads/:username', ensureAuthenticated, async (req, res) => {
 
 app.get('/uploads/:username/:id', ensureAuthenticated, async (req, res) => {
     const messages = req.flash();
-    const user = req.params.username;
+
+    const user = await fetchUserByUsername(req.params.username);
     const id = req.params.id;
+    const bOwnUploads = req.params.username == req.user.username;
+
     try {
         // fetch upload via id
-        const selectedUpload = await fetchUpload(user, id);
+        const selectedUpload = await fetchUpload(user.username, id);
         if (selectedUpload) {
             // page with current mesh
             res.render('upload.ejs', {
                 // current user
                 username: req.user == null ? 'no username' : req.user.username,
                 id: req.user == null ? 'noid' : req.user.id,
+                ownUploads: bOwnUploads,
                 // login / register popup forms
                 messages: messages,
                 bLoggedIn: req.user == null ? false :true,
@@ -265,14 +273,14 @@ app.get('/uploads/:username/:id', ensureAuthenticated, async (req, res) => {
                 tempregisterpassword1: "",
                 tempregisterpassword2: "",
                 // uploads
-                uploadlist: await fetchUpload(req.user.username),
+                uploadlist: await fetchUpload(req.params.username),
                 selectedUpload: selectedUpload,
                 uploadid: id,
                 uploaduser: user
             });
         } else {
             // redirect to profile / uploads page when no mesh found or current mesh deleted
-            res.status(404).redirect('/profile/' + req.user.username);
+            res.status(404).redirect('/profile/' + req.params.username);
         }
     } catch (e) {
         console.log(e);

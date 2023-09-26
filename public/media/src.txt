@@ -6,3 +6,6 @@ https://wallpaperaccess.com/full/1259258.jpg
 
 placeholder-img:
 https://de.m.wikipedia.org/wiki/Datei:Placeholder_view_vector.svg
+
+profile-placeholder-img:
+https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg

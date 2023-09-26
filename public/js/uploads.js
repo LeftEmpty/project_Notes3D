@@ -68,6 +68,22 @@ function delUpload(id) {
 }
 
 // EDITING UPLOAD
+const editBtn = document.querySelector('#btn--cur-note--edit');
+editBtn.addEventListener("click", toggleReadOnly);
+
+function toggleReadOnly() {
+    var textarea = document.querySelector("#cur-upload--note");
+    if (textarea.readOnly) {
+        textarea.classList.remove('cur-note--readonly');
+        textarea.classList.add('cur-note--editable');
+        textarea.removeAttribute("readonly");
+    } else {
+        textarea.classList.remove('cur-note--editable');
+        textarea.classList.add('cur-note--readonly');
+        textarea.setAttribute("readonly", "true");
+    }
+}
+
 const editForm = document.querySelector('#edit-upload-form');
 
 editForm.addEventListener("submit", (event) => {

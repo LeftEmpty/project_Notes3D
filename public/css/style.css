@@ -97,8 +97,11 @@ header button{
     border-radius: 6px;
 }
 
-
-
+.cur-note--readonly{
+    outline: none;
+    background:#333;
+    border: solid 1px #333;
+}
 
 #edit-upload-form {
     display: flex;
@@ -640,6 +643,10 @@ header button{
 
 .iu-um__desc p {
     margin: 2px 0;
+}
+.iu-um__desc .iu-um__data {
+    margin-right: 12px;
+    margin-left: 2px;
 }
 
 .iu-um__desc {
