@@ -70,6 +70,10 @@ initializePassport(passport);
 app.get('/', (req, res) => {
     const messages = req.flash();
     res.render('index.ejs', {
+        // current user
+        username: req.user == null ? 'no username' : req.user.username,
+        id: req.user == null ? 'noid' : req.user.id,
+        // login / register popup forms
         messages: messages,
         bLoggedIn: req.user == null ? false :true,
         temploginusername: "",
@@ -203,6 +207,7 @@ app.get('/uploads', ensureAuthenticated, async (req, res) => {
     try {
         res.redirect('/uploads/' + req.user.username);
     } catch (e) {
+        console.log(e);
         res.status(500).redirect('/profile');
     }
 })
@@ -210,15 +215,9 @@ app.get('/uploads', ensureAuthenticated, async (req, res) => {
 app.get('/uploads/:username', ensureAuthenticated, async (req, res) => {
     const messages = req.flash();
 
-    console.log('USERNAME USERNAME USERNAME USERNAME USERNAME')
-    console.log(req.params.username);
-
     const user = await fetchUserByUsername(req.params.username);
     const id = req.params.id;
     const bOwnUploads = req.params.username == req.user.username;
-
-    console.log('USERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSERUSER')
-    console.log(user)
 
     try {
         // page with current mesh
