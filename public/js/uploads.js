@@ -20,7 +20,16 @@ uploadForm.addEventListener("submit", (event) => {
     formData.append('fileUsername', filesUsername.value);
     formData.append('note', noteField.value);
     for (let i = 0; i < filesField.files.length; i++) {
-        formData.append('files', filesField.files[i]);
+        // check file type for glb (MIME)
+        const file = filesField.files[i];
+        if ((file.type == 'model/gltf-binary' || file.type == 'model/glTF-binary') || (file.name.endsWith('.glb') || file.name.endsWith('.GLB'))) {
+            formData.append('files', file);
+        } else {
+            // Handle invalid file type (for example, display an error message)
+            console.log('ERROR: uploadForm - invalid file type for file:', file.name);
+            // !TODO give user feedback that upload failed
+            return;
+        }
     }
 
     // console.log('formdata:');

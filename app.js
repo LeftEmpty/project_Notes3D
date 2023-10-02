@@ -249,11 +249,11 @@ app.get('/uploads/:username', ensureAuthenticated, async (req, res) => {
 app.get('/uploads/:username/:id', ensureAuthenticated, async (req, res) => {
     const messages = req.flash();
 
-    const user = await fetchUserByUsername(req.params.username);
-    const id = req.params.id;
-    const bOwnUploads = req.params.username == req.user.username;
-
     try {
+        const user = await fetchUserByUsername(req.params.username);
+        const id = req.params.id;
+        const bOwnUploads = req.params.username == req.user.username;
+
         // fetch upload via id
         const selectedUpload = await fetchUpload(user.username, id);
         if (selectedUpload) {
@@ -278,8 +278,8 @@ app.get('/uploads/:username/:id', ensureAuthenticated, async (req, res) => {
                 uploaduser: user
             });
         } else {
-            // redirect to profile / uploads page when no mesh found or current mesh deleted
-            res.status(404).redirect('/profile/' + req.params.username);
+            // redirect to uploads page when no mesh found or current mesh deleted
+            res.status(404).redirect('/uploads/' + req.params.username);
         }
     } catch (e) {
         console.log(e);
