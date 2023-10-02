@@ -6,7 +6,6 @@ CREATE TABLE users (
     username VARCHAR(255) NOT NULL UNIQUE,
     company VARCHAR(255),
     contacts TEXT,
-    
     password VARCHAR(255) NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT NOW()
 );

@@ -46,10 +46,12 @@
                                         <p><b>Filesize: </b><span class="iu-um__filename"><%= (upload.fileSize / 1000) - ((upload.fileSize / 1000) % 1) + ' KB'  %></span></p>
                                         </a>
                                     </div>
+                                    <%if(locals.ownUploads == true) { %>
                                     <div class="iu-um__del">
                                         <a class="iu_um_delanchor" data-id="<%= upload.id %>"></a>
                                         <i class="fa-solid fa-trash"></i>
                                     </div>
+                                    <% } %>
                                 </div>
                             <% } %>
                             <% if(locals.uploadlist.length == 0) { %>

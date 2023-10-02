@@ -174,15 +174,22 @@ app.post('/register', async (req, res) => {
     // !TODO set default values in form if registering failed (UX improvement)
 
     // input false - username already exists
-    console.log('username entered: ');
-    console.log(req.body.registerusername);
-    console.log(await fetchUserByUsername(req.body.registerusername));
+    console.log('information entered: ');
+    console.log(req.body);
     if (await fetchUserByUsername(req.body.registerusername) != null) {
         console.log('username already exists');
         // !TODO add feedback messages
         res.status(500).redirect('back');
         return;
     }
+    // input false - input contains illegal character(s)
+    if (/[^a-zA-Z0-9]/.test(req.body.registerusername) || / /.test(req.body.registerpassword)) {
+        console.log('input contains illegal character - please use only letters or numbers');
+        // !TODO add feedback messages
+        res.status(500).redirect('back');
+        return;
+    }
+
     // input false - passwords don't match
     if (req.body.registerpassword != req.body.registerpasswordconfirm) {
         console.log('passwords don\'t match');
@@ -194,12 +201,11 @@ app.post('/register', async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.registerpassword, 2);
         const newUser = await createUser(req.body.registerusername, hashedPassword);
-        console.log(newUser);
+        res.status(201).redirect('back');
     } catch (e) {
-        res.status(500);
+        res.status(500).redirect('back');
         console.log('couldnt register user');
     }
-    res.status(201).json({ message: 'Data fetched successfully!' });
 });
 
 // uplaods
