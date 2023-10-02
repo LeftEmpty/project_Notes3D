@@ -2,9 +2,9 @@
 App to upload, document, share and comment 3D meshes. University project made by Tom schmaeling for IU.
 
 ## Table of contents
-[General info](#general-info)
-[Technologies](#technologies)
-[Setup](#setup)
+* [General info](#general-info)
+* [Technologies](#technologies)
+* [Setup](#setup)
 
 
 ## General Info
@@ -18,7 +18,7 @@ These are labeled as 'Uploads' and will be shared to the public by default, the 
 
 As the project is a lot of features i might have to reduce the scope during phase 2 depending on how well development progresses.
 
-### Cut Features
+### Removed Features
 I have replaced the feature of placing 'note nodes' on the model itself for now with a simpler note taking system. This might change depending on whether the scope of the project as of now is deemed sufficient or not.
 
 I also decided to forego the use of firebase in favor of writing a simpler custom mysql database setup.
@@ -92,7 +92,7 @@ git clone https://github.com/leftempty/project_notes3d.git
 ### Open the project
 While you can most likely use any IDE, i strongly recommend VS Code to prevent any unforseen issues when testing this project.
 
-### Setup your .env file
+### Setup the .env file
 * create a '.env' file in the root directory
 * copy the following template into the file
 * fill in your mysql information following the template, leaving already set information as is
@@ -120,7 +120,7 @@ We can now finally run the project using the following command:
 ```
 npm run devStart
 ```
-The terminal should now be labeled node and show the display the following:
+The terminal should now be labeled node and show display the following:
 ```
 > project_notes3d@1.0.0 devStart
 > nodemon app.js
@@ -135,3 +135,7 @@ server is running on port 3333
 
 You can now use the system by accessing http://localhost:3333/ in your browser.
 I recommend google chrome or mozilla firefox.
+
+### debugging
+In case you run into issues and need to restart the project, the easiest way to do so is by saving any non-static file (app.js for example).
+This will cause the system to restart the server and apply any changes made.
