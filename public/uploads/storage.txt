@@ -1,0 +1,1 @@
+replace this folder structure with cloudstorage for production environment

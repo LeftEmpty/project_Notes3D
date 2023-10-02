@@ -1,6 +1,10 @@
 banner-mannequin:
 self-made
 
+banner-mannequin v2:
+https://m.media-amazon.com/images/I/61VUJF9S5vL.jpg
+- removed background via picwish
+
 banner-wallpaper:
 https://wallpaperaccess.com/full/1259258.jpg
 
