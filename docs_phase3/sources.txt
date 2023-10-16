@@ -1,0 +1,41 @@
+MEDIA FILES USED IN PROJECT:
+
+banner-mannequin:
+self-made.
+
+banner-mannequin v2:
+https://m.media-amazon.com/images/I/61VUJF9S5vL.jpg
+- removed background via picwish
+
+banner-wallpaper:
+https://wallpaperaccess.com/full/1259258.jpg
+
+placeholder-img:
+https://de.m.wikipedia.org/wiki/Datei:Placeholder_view_vector.svg
+
+profile-placeholder-img:
+https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg
+
+----------
+
+NODE JS PACKAGES USED:
+
+- express 
+- express layout
+- express session
+- multer
+- bcrypt
+- passport
+
+----------
+
+OTHER:
+
+The intial design prototype used a color palette from this source:
+https://colorhunt.co/palette/025464e57c23e8aa42f8f1f1
+
+Video editing software:
+blender 2.9 (unconvential but it has a video editing mode)
+
+Audio editing software:
+audacity (used for recording, filtering, kompressing, normalizing, noise removal, etc.)
